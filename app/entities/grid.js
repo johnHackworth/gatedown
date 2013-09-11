@@ -1,6 +1,6 @@
 Crafty.c('Grid', {
-  tileWidth: 50,
-  tileHeight: 50,
+  tileWidth: 10,
+  tileHeight: 10,
   init: function() {
     this.attr({
       w: this.tileWidth,

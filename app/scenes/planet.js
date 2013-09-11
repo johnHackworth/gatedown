@@ -1,14 +1,15 @@
 window.gatedown = window.gatedown || {};
 window.gatedown.src = window.gatedown.src || {};
 window.gatedown.app = window.gatedown.app || {};
+window.gatedown.app.scenes = window.gatedown.app.scenes || {};
 
-Crafty.scene('Planet', function() {
-  Crafty.e('2D, Canvas, Text')
-    .attr({ x: 30, y: 30, color: '#FFFFFF'})
-    .text('attack!');
+window.gatedown.app.scenes.planet = {};
 
-  Crafty.e('Ship').at(0,0);
-
-}, function() {
+Crafty.scene('Planet', (function() {
+  this.playerShip = Crafty.e('Ship').at(0,0);
+  this.playerShip.humanPlayer();
+  this.otherShip = Crafty.e('Ship').at(10,10);
+}).bind(window.gatedown.app.scenes.planet ),
+function() {
 
 });
