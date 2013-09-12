@@ -2,7 +2,8 @@ Crafty.c('Ship', {
   init: function() {
     this.requires('Entity, Color, Solid, Keyboard, Collision')
       .color('#FFFFFF')
-      .stopOnSolids();
+      .stopOnSolids()
+      .hitByBullet()
     this.initBindings();
     this.counter = 0;
   },
@@ -26,9 +27,21 @@ Crafty.c('Ship', {
     }
   },
   stopOnSolids: function() {
-    this.onHit('Solid', this.stopMovement);
+    this.onHit('Solid', this.stopMovement.bind(this));
 
     return this;
+  },
+  hitByBullet: function() {
+    this.onHit('Bullet', this.bulletImpact.bind(this));
+  },
+  bulletImpact: function(bullets) {
+    for(var i = 0, l = bullets.length; i < l; i++) {
+      if(bullets[i].obj.owner != this) {
+        this.stopMovement();
+        console.log('POOOOM')
+      }
+    }
+
   },
 
   // Stops the movement
@@ -141,7 +154,8 @@ Crafty.c('Ship', {
     if(!this.lastShot || this.counter - this.lastShot > 20) {
       console.log('piuuuung')
       this.lastShot = this.counter;
-      window.bullet = Crafty.e('Bullet').shoot(this.heading, this.x + 20, this.y).color('#FF0000');
+      var activateBulletAfter = 15;
+      window.bullet = Crafty.e('Bullet').shoot(this, activateBulletAfter).color('#FF0000');
       window.ship = this;
       console.log(bullet.x, ship.x);
     }

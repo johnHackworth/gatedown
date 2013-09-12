@@ -22,5 +22,6 @@ Crafty.c('Grid', {
       w: x,
       h: y
     })
+    return this;
   }
 });

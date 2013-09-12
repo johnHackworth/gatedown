@@ -4,9 +4,8 @@ Crafty.c('Bullet', {
   w: 3,
   h: 1,
   init: function(options) {
-    this.requires('Entity, Color, Solid, Collision')
+    this.requires('Entity, Color, Collision')
       .color('#00FFFF')
-      .stopOnSolids()
       .resize(5,2);
     this.initBindings();
     this.counter = 0;
@@ -19,25 +18,31 @@ Crafty.c('Bullet', {
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
   },
-  shoot: function(heading, x, y) {
+  shoot: function(owner, activateBulletAfter) {
     this.attr({
-      heading: heading,
-      x: x,
-      y: y,
-      rotation: heading
+      heading: owner.heading,
+      x: owner.x,
+      y: owner.y,
+      rotation: owner.heading,
+      owner: owner,
+      activateBulletAfter: activateBulletAfter
     });
     return this;
   },
   tick: function() {
+    if(this.hit('solid')) {
+      console.log('hit solid')
+    }
+    if(this.activateBulletAfter && this.counter && this.counter >= this.activateBulletAfter) {
+      if(this.hit('Ship')) {
+        this.stopMovement();
+      }
+    }
     this.counter++;
     this.inertia();
     if(this.counter > 100) {
       this.destroy();
     }
-  },
-  stopOnSolids: function() {
-    this.onHit('Solid', this.stopMovement);
-    return this;
   },
 
   // Stops the movement
