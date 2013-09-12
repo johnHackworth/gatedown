@@ -11,10 +11,16 @@ Crafty.c('Grid', {
   // Locate this entity at the given position on the grid
   at: function(x, y) {
     if (x === undefined && y === undefined) {
-      return { x: this.x/this.tileWidth, y: this.y/this.tileHeight }
+      return { x: this.x, y: this.y }
     } else {
-      this.attr({ x: x * this.tileWidth, y: y * this.tileHeight });
+      this.attr({ x: x, y: y });
       return this;
     }
+  },
+  resize: function(x, y) {
+    this.attr({
+      w: x,
+      h: y
+    })
   }
 });

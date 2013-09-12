@@ -8,7 +8,7 @@ window.gatedown.app.scenes.planet = {};
 Crafty.scene('Planet', (function() {
   this.playerShip = Crafty.e('Ship').at(0,0);
   this.playerShip.humanPlayer();
-  this.otherShip = Crafty.e('Ship').at(10,10);
+  this.otherShip = Crafty.e('Ship').at(30,30);
 }).bind(window.gatedown.app.scenes.planet ),
 function() {
 
