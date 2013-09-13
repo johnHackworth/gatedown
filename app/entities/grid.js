@@ -23,5 +23,8 @@ Crafty.c('Grid', {
       h: y
     })
     return this;
-  }
+  },
+  toRadians: function(degrees) {
+    return degrees * Math.PI / 180
+  },
 });

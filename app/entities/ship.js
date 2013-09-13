@@ -1,15 +1,27 @@
+Crafty.sprite('assets/ship1.png', {sprShip: [0,0,20,15]})
+Crafty.sprite('assets/ship2.png', {sprShip2: [0,0,20,20]})
+
+
 Crafty.c('Ship', {
   init: function() {
-    this.requires('Entity, Color, Solid, Keyboard, Collision')
-      .color('#FFFFFF')
+    this.requires('Entity, Solid, Keyboard, Collision, sprShip')
+      // .color('#FFFFFF')
+      .resize(20,15)
       .stopOnSolids()
       .hitByBullet()
     this.initBindings();
     this.counter = 0;
+    this.components = {};
+    this.initComponent('Engine', [-3, 5]);
   },
   velocity: 1,
-  maxVelocity: 10,
+  maxVelocity: 4,
   heading: 0,
+  initComponent: function(component, position) {
+    this.components[component.toLowerCase()] = Crafty.e(component);
+    this.components[component.toLowerCase()].owner = this;
+    this.components[component.toLowerCase()].position = position;
+  },
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
   },
@@ -24,10 +36,10 @@ Crafty.c('Ship', {
       this.checkKeyboardEvents();
       this.cameraCenter();
 
-    }
+    };
   },
   stopOnSolids: function() {
-    this.onHit('Solid', this.stopMovement.bind(this));
+    this.onHit('Ship', this.stopMovement.bind(this));
 
     return this;
   },
@@ -45,15 +57,16 @@ Crafty.c('Ship', {
   },
 
   // Stops the movement
-  stopMovement: function(solid) {
-    this.velocity = (this.velocity * -1) / 2;
+  stopMovement: function(elements) {
+    if(this.hit('Ship')) {
+      this.velocity = -1;
+    } else {
+      this.velocity = 0;
+    }
     if (this._movement) {
       this.x -= this._movement.x;
       this.y -= this._movement.y;
     }
-  },
-  toRadians: function(degrees) {
-    return degrees * Math.PI / 180
   },
   chooseHeading: function() {
     return Math.floor(Math.random() * 360)
@@ -162,3 +175,8 @@ Crafty.c('Ship', {
   }
 });
 
+Crafty.c('EnemyShip', {
+  init: function() {
+    this.requires('Ship, sprShip2')
+  }
+});
