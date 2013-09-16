@@ -56,6 +56,13 @@ Crafty.c('ShipComponent', {
   },
   toRadians: function(degrees) {
     return degrees * Math.PI / 180
+  },
+  assignOwner: function(owner) {
+    this.owner = owner;
+    this.onOwner();
+  },
+  onOwner: function() {
+
   }
 });
 
