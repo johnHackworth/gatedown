@@ -7,8 +7,9 @@ window.gatedown.src.Director = function() {
 
 };
 window.gatedown.config = {
-  width: 800,
-  height: 600
+  width: 600,
+  height: 400,
+  fps: 30
 }
 window.gatedown.src.Director.prototype = {
   backgroundColor: '#333333',

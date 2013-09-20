@@ -1,19 +1,19 @@
 Crafty.c('Bullet', {
-  tileWidth: 5,
-  tileHeight: 3,
-  w: 3,
+  tileWidth: 3,
+  tileHeight: 1,
+  w: 5,
   h: 1,
   init: function(options) {
     this.requires('Entity, Color, Collision')
       .color('#00FFFF')
-      .resize(5,2);
+      .resize(5,1);
     this.initBindings();
     this.counter = 0;
 
 
   },
-  velocity: 12,
-  maxVelocity: 10,
+  velocity: 15,
+  maxVelocity: 20,
   heading: 0,
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
@@ -30,17 +30,16 @@ Crafty.c('Bullet', {
     return this;
   },
   tick: function() {
-    if(this.hit('solid')) {
-      console.log('hit solid')
-    }
-    if(this.activateBulletAfter && this.counter && this.counter >= this.activateBulletAfter) {
-      if(this.hit('Ship')) {
-        this.stopMovement();
-      }
-    }
+
     this.counter++;
+    if(this.counter > this.activateBulletAfter) {
+      this.active = true;
+    }
+    if(this.hit('Ship') && this.active) {
+      this.destroy();
+    }
     this.inertia();
-    if(this.counter > 100) {
+    if(this.counter > 50) {
       this.destroy();
     }
   },

@@ -1,24 +1,25 @@
-Crafty.sprite('assets/ship1.png', {sprShip: [0,0,20,15]})
-Crafty.sprite('assets/ship2.png', {sprShip2: [0,0,20,15]})
+Crafty.sprite('assets/little_ship1.png', {sprShip: [0,0,15,11]})
+Crafty.sprite('assets/little_ship2.png', {sprShip2: [0,0,15,11]})
 
 
 Crafty.c('Ship', {
+  acceleration: 0.5,
   init: function() {
     this.requires('Entity, Color, Solid, Keyboard, Collision, sprShip')
       .color('transparent')
-      .resize(20,15)
+      .resize(15,11 )
       .stopOnSolids()
       .hitByBullet()
     this.initBindings();
     this.counter = 0;
     this.components = {};
-    this.initComponent('Engine', [-6, 5]);
+    this.initComponent('Engine', [-5, 3]);
     this.explosion = Crafty.e('Explosion');
     this.path = [];
   },
   velocity: 1,
   hullIntegrity: 10,
-  maxVelocity: 2,
+  maxVelocity: 10,
   heading: 0,
   initComponent: function(component, position) {
     this.components[component.toLowerCase()] = Crafty.e(component);
@@ -52,27 +53,27 @@ Crafty.c('Ship', {
   },
   drawPath: function() {
     // console.log(this.path);
-      var ctx = Crafty.canvas.context;
-      ctx.save();
+      // var ctx = Crafty.canvas.context;
+      // ctx.save();
 
-      ctx.beginPath();
-      ctx.lineWidth = 5;
-      ctx.lineCap = 'round';
-      var random = Math.floor(Math.random() * 5);
+      // ctx.beginPath();
+      // ctx.lineWidth = 5;
+      // ctx.lineCap = 'round';
+      // var random = Math.floor(Math.random() * 5);
 
 
-      var random2 = Math.floor(Math.random() * 1);
-      ctx.moveTo(this.path[0 + random][0] , this.path[0 + random][1]);
+      // var random2 = Math.floor(Math.random() * 1);
+      // ctx.moveTo(this.path[0 + random][0] , this.path[0 + random][1]);
 
-      ctx.quadraticCurveTo(this.path[20][0],
-          this.path[20][1],
-          this.path[35 + random2][0],
-          this.path[35 + random2][1]);
+      // ctx.quadraticCurveTo(this.path[20][0],
+      //     this.path[20][1],
+      //     this.path[35 + random2][0],
+      //     this.path[35 + random2][1]);
 
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.stroke();
-      ctx.closePath();
-      ctx.restore();
+      // ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+      // ctx.stroke();
+      // ctx.closePath();
+      // ctx.restore();
   },
   stopOnSolids: function() {
     this.onHit('Ship', this.stopMovement.bind(this));
@@ -100,7 +101,6 @@ Crafty.c('Ship', {
         if(bullet[i] && bullet[i].obj && bullet[i].obj.destroy) {
           bullet[i].obj.destroy();
         }
-        console.log('POOOOM')
       }
     }
 
@@ -122,11 +122,15 @@ Crafty.c('Ship', {
   chooseHeading: function() {
     return Math.floor(Math.random() * 360)
   },
-  inertia: function() {
+  getNewPosition: function() {
     var newX = this.x + (Math.cos(this.toRadians(this.heading)) * this.velocity);
     var newY = this.y + (Math.sin(this.toRadians(this.heading)) * this.velocity);
-    this.x = newX;
-    this.y = newY;
+   return [newX, newY]
+  },
+  inertia: function() {
+    var newPosition = this.getNewPosition()
+    this.x = newPosition[0];
+    this.y = newPosition[1];
   },
   turn: function(amount) {
     this.heading += amount;
@@ -148,18 +152,22 @@ Crafty.c('Ship', {
     } else if (e.key == Crafty.keys['RIGHT_ARROW']) {
       this.turn(1);
     } else if (e.key == Crafty.keys['UP_ARROW']) {
-      this.velocity++;
+      this.velocity += this.acceleration;
     } else if (e.key == Crafty.keys['DOWN_ARROW']) {
-      this.velocity--;
+      this.velocity -= this.acceleration;
     }
   },
   checkKeyboardEvents: function() {
     if(this.playerControlled) {
       if(this.isDown('LEFT_ARROW') && this.counter % 1 == 0) {
-        this.turn(-1 * this.velocity);
+        var v = -1 * 20 / this.velocity;
+        v = v <= -10? v : -10;
+        this.turn(-4);
       }
       if (this.isDown('RIGHT_ARROW') && this.counter % 1 == 0) {
-        this.turn(1 * this.velocity);
+        var v = 1 * 20 / this.velocity;
+        v = v >= 5? v : 10;
+        this.turn(4);
       }
 
       if (this.isDown('UP_ARROW') && this.counter % 10 == 0) {
@@ -175,23 +183,23 @@ Crafty.c('Ship', {
     }
   },
   accelerate: function() {
-    this.velocity++;
+    this.velocity += this.acceleration;
     if(this.velocity > this.maxVelocity) {
-      this.velocity--;
+      this.velocity -= this.acceleration;
     };
     this.trigger('accelerate');
   },
   deccelerate: function() {
     this.trigger('brake');
-    this.velocity--;
+    this.velocity -= this.acceleration;
     if(this.velocity < 0) {
       this.velocity = 0;
     }
   },
   cameraCenter: function() {
     if(this.playerControlled) {
-      Crafty.viewport.x = this.x * -1 + (1/Crafty.viewport._zoom) * gatedown.config.width / 2;
-      Crafty.viewport.y = this.y * -1 + (1/Crafty.viewport._zoom) * gatedown.config.height / 2;
+      Crafty.viewport.x = this.x * -1 + 1 * gatedown.config.width / 2;
+      Crafty.viewport.y = this.y * -1 + 1 * gatedown.config.height / 2;
 
     }
   },
@@ -253,13 +261,11 @@ Crafty.c('Ship', {
 
 
   shoot: function() {
-    if(!this.lastShot || this.counter - this.lastShot > 20) {
-      console.log('piuuuung')
+    if(!this.lastShot || this.counter - this.lastShot > 5) {
       this.lastShot = this.counter;
       var activateBulletAfter = 15;
       window.bullet = Crafty.e('Bullet').shoot(this, activateBulletAfter).color('#FF0000');
       window.ship = this;
-      console.log(bullet.x, ship.x);
     }
   }
 });
