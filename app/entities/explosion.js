@@ -1,11 +1,15 @@
-Crafty.sprite(20, 'assets/explosion1.png', {
-  sprExplosion: [0, 3]
-}, 0, 3);
+Crafty.sprite(30, 'assets/explosion2.png', {
+  sprExplosion: [0, 7],
+}, 0, 0);
 Crafty.c('Explosion', {
+  size: 30 / 2,
+  sizeSmall: 30 / 4,
   init: function() {
-    this.requires('Entity, sprExplosion, SpriteAnimation')
-      .animate('bigExplosion', 0, 0, 3)
-      .animate('smallExplosion', 0, 0, 1);
+    this.requires('Entity, sprExplosion,  SpriteAnimation')
+      .animate('bigExplosion', 0, 0, 8)
+      .animate('smallExplosion', 0, 0, 1)
+      .animate('smoke', 0, 1, 4)
+      .animate('lightSmoke', 3, 1, 5);
     this.initBindings();
     this.counter = 0;
   },
@@ -16,7 +20,10 @@ Crafty.c('Explosion', {
   },
   tick: function() {
     this.counter++;
-    if(!this.isPlaying('bigExplosion') && !this.isPlaying('smallExplosion')) {
+    if(!this.isPlaying('bigExplosion') &&
+      !this.isPlaying('smallExplosion') &&
+      !this.isPlaying('smoke') &&
+      !this.isPlaying('lightSmoke')) {
       this.visible = false;
     }
   },
@@ -54,12 +61,12 @@ Crafty.c('Explosion', {
     Crafty.e("2D,Canvas,Particles").particles(options).attr({x: at[0], y: at[1]});
   },
   explode: function(at) {
-    this.at(at[0],at[1])
+    this.at(at[0] - this.size,at[1] - this.size)
     this.visible = true;
     this.animate('bigExplosion', 4, 1)  ;
   },
   sparks: function(at) {
-    this.at(at[0],at[1])
+    this.at(at[0] - this.size,at[1] - this.size)
     this.visible = true;
     this.animate('smallExplosion', 4, 1);
   },
@@ -97,37 +104,16 @@ Crafty.c('Explosion', {
     Crafty.e("2D,Canvas,Particles").particles(options).attr({x: at[0], y: at[1]});
   },
   smoke: function(at) {
-    var options = {
-      maxParticles: 5,
-      size: 2,
-      sizeRandom: 2,
-      speed: 1,
-      speedRandom: 1.2,
-      // Lifespan in frames
-      lifeSpan: 5,
-      lifeSpanRandom: 2,
-      // Angle is calculated clockwise: 12pm is 0deg, 3pm is 90deg etc.
-      angle: 0,
-      angleRandom: 34,
-      startColour: [150, 50, 0, 1],
-      startColourRandom: [48, 50, 45, 0],
-      endColour: [100, 50, 0, 0],
-      endColourRandom: [60, 60, 60, 0],
-      // Only applies when fastMode is off, specifies how sharp the gradients are drawn
-      sharpness: 5,
-      sharpnessRandom: 5,
-      // Random spread from origin
-      spread: 3,
-      // How many frames should this last
-      duration: 4,
-      // Will draw squares instead of circle gradients
-      fastMode: true,
-      gravity: { x: 0, y: 0.1 },
-      // sensible values are 0-3
-      jitter: 0
-    }
-
-    // Crafty.e("2D,Canvas,Particles").particles(options).attr({x: at[0], y: at[1]});
+    // console.log('aaa')
+    this.at(at[0] - this.size + Math.floor(Math.random() * 2),at[1] - this.size + Math.floor(Math.random() * 2))
+    this.visible = true;
+    this.animate('smoke', 5, 1);
+  },
+  lightSmoke: function(at) {
+    // console.log('aaa')
+    this.at(at[0] - this.size + Math.floor(Math.random() * 2),at[1] - this.size + Math.floor(Math.random() * 2))
+    this.visible = true;
+    this.animate('lightSmoke', 3, 1);
   }
 });
 

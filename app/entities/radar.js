@@ -51,17 +51,23 @@ Crafty.c('Radar', {
     ctx.fill();
 
     ctx.fillStyle = this.playerColor;
-    ctx.fillRect(this.x,this.y,1,1)
+    var xPoint, yPoint;
     for(var i = 0, l = this.ships.length; i < l; i++) {
       var distanceX = this.ships[i].x - this.player.x;
       var distanceY = this.ships[i].y - this.player.y;
-      if(this.ships[i].distanceTo(this.player) < 50 * this.scale) {
+      distanceX = distanceX > 50 * this.scale? 50 * this.scale: distanceX;
+      distanceX = distanceX < -50 * this.scale? -50 * this.scale: distanceX;
+      distanceY = distanceY > 50 * this.scale? 50 * this.scale: distanceY;
+      distanceY = distanceY < -50 * this.scale? -50 * this.scale: distanceY;
+      if(this.ships[i].hullIntegrity > 0) {
         if(this.ships[i].faction === this.player.faction) {
           ctx.fillSyle = this.alliedColor;
         } else {
           ctx.fillStyle = this.enemyColor;
         }
-        ctx.fillRect(this.x + distanceX / this.scale,this.y + distanceY / this.scale,this.pointSize, this.pointSize)
+        xPoint = this.x + distanceX / this.scale;
+        yPoint = this.y + distanceY / this.scale
+        ctx.fillRect(xPoint,yPoint,this.pointSize, this.pointSize)
       }
     };
   ctx.fillStyle = "rgba(255,255,255,0.5)";

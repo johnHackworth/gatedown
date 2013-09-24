@@ -59,8 +59,10 @@ Crafty.c('Ship', {
       }
     }
 
-    if(this.hullIntegrity <= 1 && this.counter % 20 == 0) {
+    if(this.hullIntegrity <= 1 && this.counter % 20 == 0 && this.velocity > 2) {
       this.explosion.smoke(this.rotatedPosition([0,3]));
+    } else if(this.hullIntegrity <= 2 && this.counter % 20 == 0 && this.velocity > 2) {
+      this.explosion.lightSmoke(this.rotatedPosition([0,3]));
     }
 
   },

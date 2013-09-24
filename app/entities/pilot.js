@@ -55,7 +55,7 @@ window.gatedown.src.pilot.prototype = {
   },
   action: function() {
     this.counter++;
-    if(!(this.counter % this.THINK_TURN == 0)) {
+    if(!(this.counter % this.THINK_DELTA == 0)) {
       // console.log(this.counter, this.THINK_TURN)
       return;
     }
