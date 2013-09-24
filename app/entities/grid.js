@@ -43,7 +43,7 @@ Crafty.c('Grid', {
   getAngleTo: function(entity) {
     var angle = Math.atan2(entity.y - this.y, entity.x - this.x);
     if (angle < 0) angle = Math.PI * 2 + angle;
-    return Crafty.math.radToDeg(angle)
+    return Crafty.math.radToDeg(angle) % 360;
   }
 
 });

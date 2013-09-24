@@ -1,26 +1,30 @@
-Crafty.sprite('assets/little_ship1.png', {sprShip: [0,0,15,11]})
+Crafty.sprite('assets/little_ship1.png', {sprShip: [0,0,10,9]})
 Crafty.sprite('assets/little_ship2.png', {sprShip2: [0,0,15,11]})
 
 
 Crafty.c('Ship', {
-  acceleration: 0.5,
+  acceleration: 1,
+  turningRadius: 8,
+  baseTurningRadius: 8,
+  outOfControl: 0,
   init: function() {
     this.requires('Entity, Color, Solid, Keyboard, Collision, sprShip')
       .color('transparent')
-      .resize(15,11 )
+      .resize(10,9)
       .stopOnSolids()
       .hitByBullet()
     this.initBindings();
     this.counter = 0;
     this.components = {};
-    this.initComponent('Engine', [-5, 3]);
+    this.initComponent('Engine', [-5, 2]);
     this.explosion = Crafty.e('Explosion');
     this.path = [];
   },
-  velocity: 1,
-  hullIntegrity: 10,
-  maxVelocity: 10,
+  velocity: 0 ,
+  hullIntegrity: 3,
+  maxVelocity: 8,
   heading: 0,
+  centered: false,
   initComponent: function(component, position) {
     this.components[component.toLowerCase()] = Crafty.e(component);
     this.components[component.toLowerCase()].assignOwner(this);
@@ -35,21 +39,33 @@ Crafty.c('Ship', {
 
     this.inertia();
 
-    if(!this.playerControlled) {
-      this.think();
-      this.maniobrate();
-    } else {
-
-      this.checkKeyboardEvents();
+    if(this.centered) {
       this.cameraCenter();
-    };
-
-    // this.path.push(this.rotatedPosition([0,7]));
-    if(this.path.length > 50) {
-      this.path.splice(0,1);
-      // this.drawPath();
     }
 
+    if(!this.outOfControl) {
+
+      if(!this.playerControlled) {
+        this.think();
+        this.maniobrate();
+      } else {
+        this.checkKeyboardEvents();
+      };
+    } else {
+      this.outOfControl--;
+      this.maniobrate();
+      if(!this.outOfControl) {
+        this.turningRadius = this.baseTurningRadius;
+      }
+    }
+
+    if(this.hullIntegrity <= 1 && this.counter % 20 == 0) {
+      this.explosion.smoke(this.rotatedPosition([0,3]));
+    }
+
+  },
+  centerOfAction: function() {
+    this.centered = true;
   },
   drawPath: function() {
     // console.log(this.path);
@@ -76,7 +92,7 @@ Crafty.c('Ship', {
       // ctx.restore();
   },
   stopOnSolids: function() {
-    this.onHit('Ship', this.stopMovement.bind(this));
+    this.onHit('Ship', this.crashOnSolid.bind(this));
 
     return this;
   },
@@ -98,8 +114,8 @@ Crafty.c('Ship', {
 
 
         // this.stopMovement();
-        if(bullet[i] && bullet[i].obj && bullet[i].obj.destroy) {
-          bullet[i].obj.destroy();
+        if(bullets[i] && bullets[i].obj && bullets[i].obj.destroy) {
+          bullets[i].obj.destroy();
         }
       }
     }
@@ -119,13 +135,63 @@ Crafty.c('Ship', {
       this.y -= this._movement.y;
     }
   },
+  crashOnSolid: function(elements) {
+    if(this.outOfControl) {
+      return;
+    }
+    if(this.hit('Ship')) {
+      var ship = elements[0].obj;
+      var shipDirection = ship.getAngleTo(ship)
+      var modifAngle = ((this.heading - shipDirection)) % 360;
+      this.intendedHeading = ((this.heading + modifAngle)) % 360;
+      this.outOfControl = 30;
+      this.turningRadius = 15;
+       if(Math.abs(modifAngle) < 30) {
+         this.velocity = -1 ;
+      } else if(Math.abs(modifAngle) < 90) {
+        this.velocity = 3 * this.velocity / 5
+      } else if(Math.abs(modifAngle) < 120) {
+        this.velocity = ship.velocity / 6 + this.velocity;
+      } else if(Math.abs(modifAngle) < 140) {
+        this.velocity =  ship.velocity / 5 + this.velocity;
+      } else {
+        this.velocity = ship.velocity / 4 + this.velocity;
+      }
+    }
+    if (this._movement) {
+      this.x -= this._movement.x;
+      this.y -= this._movement.y;
+    }
+  },
+  crashedOnShip: function(ship) {
+    if(this.outOfControl) {
+      return;
+    }
+    var ship = elements[0].obj;
+    var shipDirection = this.getAngleTo(ship)
+    var modifAngle = ((this.heading - shipDirection)) % 360;
+    this.intendedHeading = ((this.heading + modifAngle)) % 360;
+    this.outOfControl = 5;
+    this.turningRadius = 10;
+     if(Math.abs(modifAngle) < 30) {
+       this.velocity = this.velocity + (ship.velocity - this.velocity)
+    } else if(Math.abs(modifAngle) < 90) {
+      this.velocity = this.velocity + 2* (ship.velocity - this.velocity) / 3
+    } else if(Math.abs(modifAngle) < 120) {
+      this.velocity = this.velocity + 2* (ship.velocity - this.velocity) / 3
+    } else if(Math.abs(modifAngle) < 140) {
+      this.velocity =  this.velocity + 2* (ship.velocity - this.velocity) / 3
+    } else {
+      this.velocity = this.velocity + 2* (ship.velocity - this.velocity) / 3
+    }
+  },
   chooseHeading: function() {
     return Math.floor(Math.random() * 360)
   },
   getNewPosition: function() {
     var newX = this.x + (Math.cos(this.toRadians(this.heading)) * this.velocity);
     var newY = this.y + (Math.sin(this.toRadians(this.heading)) * this.velocity);
-   return [newX, newY]
+    return [newX, newY]
   },
   inertia: function() {
     var newPosition = this.getNewPosition()
@@ -160,13 +226,9 @@ Crafty.c('Ship', {
   checkKeyboardEvents: function() {
     if(this.playerControlled) {
       if(this.isDown('LEFT_ARROW') && this.counter % 1 == 0) {
-        var v = -1 * 20 / this.velocity;
-        v = v <= -10? v : -10;
         this.turn(-4);
       }
       if (this.isDown('RIGHT_ARROW') && this.counter % 1 == 0) {
-        var v = 1 * 20 / this.velocity;
-        v = v >= 5? v : 10;
         this.turn(4);
       }
 
@@ -178,7 +240,15 @@ Crafty.c('Ship', {
       }
 
       if (this.isDown('SPACE')) {
-        this.shoot();
+        this.pilot.shoot();
+      }
+
+      if(this.isDown('Z')) {
+        this.pilot.breakFormation();
+      }
+
+      if(this.isDown('X')) {
+        this.pilot.joinFormation();
       }
     }
   },
@@ -196,19 +266,23 @@ Crafty.c('Ship', {
       this.velocity = 0;
     }
   },
+  brake: function() {
+    this.trigger('brake');
+    this.velocity -= 3*this.acceleration;
+    if(this.velocity < 0) {
+      this.velocity = 0;
+    }
+  },
   cameraCenter: function() {
-    if(this.playerControlled) {
+    // if(this.playerControlled) {
+
       Crafty.viewport.x = this.x * -1 + 1 * gatedown.config.width / 2;
       Crafty.viewport.y = this.y * -1 + 1 * gatedown.config.height / 2;
 
-    }
+    // }
   },
   think: function() {
-    if(this.counter && this.counter % 5 == 0) {
-      this.pilot.action();
-
-    //   this.intendedDirection = this.chooseHeading();
-    }
+    this.pilot.action();
   },
   maniobrate: function() {
     if(!this.intendedDirection || this.intendedDirection == this.heading) return;
@@ -230,23 +304,23 @@ Crafty.c('Ship', {
         Math.abs(this.intendedDirection - this.heading) <= 180
       ) {
       if(this.heading < this.intendedDirection) {
-        if(this.intendedDirection - this.heading <= 5) {
+        if(this.intendedDirection - this.heading <= this.turningRadius) {
           this.heading = this.intendedDirection;
         } else {
-          this.heading = this.heading + 5;
+          this.heading = this.heading + this.turningRadius;
         }
       } else {
-        if(this.heading - this.intendedDirection <= 5) {
+        if(this.heading - this.intendedDirection <= this.turningRadius) {
           this.heading = this.intendedDirection;
         } else {
-          this.heading = this.heading - 5;
+          this.heading = this.heading - this.turningRadius;
         }
       }
     } else {
       if(this.heading < this.intendedDirection) {
-        this.heading = this.heading - 5;
+        this.heading = this.heading - this.turningRadius;
       } else {
-        this.heading = this.heading + 5;
+        this.heading = this.heading + this.turningRadius;
       }
 
     }
@@ -264,8 +338,7 @@ Crafty.c('Ship', {
     if(!this.lastShot || this.counter - this.lastShot > 5) {
       this.lastShot = this.counter;
       var activateBulletAfter = 15;
-      window.bullet = Crafty.e('Bullet').shoot(this, activateBulletAfter).color('#FF0000');
-      window.ship = this;
+      Crafty.e('Bullet').shoot(this, activateBulletAfter).color('#FF0000');
     }
   }
 });

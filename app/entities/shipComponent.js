@@ -36,7 +36,6 @@ Crafty.c('ShipComponent', {
   bulletImpact: function(bullets) {
     for(var i = 0, l = bullets.length; i < l; i++) {
       if(bullets[i].obj.owner != this) {
-        console.log('POOOOM')
       }
     }
 

@@ -39,7 +39,7 @@ Crafty.c('Bullet', {
       this.destroy();
     }
     this.inertia();
-    if(this.counter > 50) {
+    if(this.counter > 40) {
       this.destroy();
     }
   },

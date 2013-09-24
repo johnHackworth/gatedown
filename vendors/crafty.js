@@ -51,7 +51,7 @@
 
 	initState = function () {
     	GUID = 1; //GUID for entity IDs
-    	FPS = 30;
+    	FPS = 20;
     	frame = 1;
 
     	components = {}; //map of components and their functions
