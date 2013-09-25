@@ -15,8 +15,7 @@ Crafty.c('Ship', {
       .hitByBullet()
     this.initBindings();
     this.counter = 0;
-    this.components = {};
-    this.initComponent('Engine', [-5, 2]);
+    this.initComponents();
     this.explosion = Crafty.e('Explosion');
     this.path = [];
   },
@@ -29,6 +28,12 @@ Crafty.c('Ship', {
     this.components[component.toLowerCase()] = Crafty.e(component);
     this.components[component.toLowerCase()].assignOwner(this);
     this.components[component.toLowerCase()].position = position;
+  },
+  initComponents: function() {
+    this.components = {};
+    this.initComponent('Engine', [-5, 2]);
+    this.initComponent('LeftWing1', [0, -3]);
+    this.initComponent('RightWing1', [0, 7 ]);
   },
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
@@ -337,11 +342,9 @@ Crafty.c('Ship', {
 
 
   shoot: function() {
-    if(!this.lastShot || this.counter - this.lastShot > 5) {
-      this.lastShot = this.counter;
-      var activateBulletAfter = 15;
-      Crafty.e('Bullet').shoot(this, activateBulletAfter).color('#FF0000');
-    }
+    this.components['rightwing1'].shoot();
+
+    this.components['leftwing1'].shoot();
   }
 });
 
@@ -349,5 +352,18 @@ Crafty.c('EnemyShip', {
   init: function() {
     this.requires('Ship, sprShip2')
     this.path = [];
+    this.initComponents();
+  },
+  shoot: function() {
+    if(!this.lastShot || this.counter - this.lastShot > 5) {
+      this.lastShot = this.counter;
+      var activateBulletAfter = 15;
+      Crafty.e('Bullet').shoot(this, activateBulletAfter).color('#FF0000');
+    }
+  },
+  initComponents: function() {
+    this.components = {};
+    this.initComponent('Engine', [-5, 2]);
   }
+
 });

@@ -15,7 +15,8 @@ Crafty.scene('Planet', (function() {
     var ship = Crafty.e('EnemyShip').at(5000 * Math.random() -2500, 5000 * Math.random() -2500);
     ship.faction = 1;
     var pilot = new window.gatedown.src.pilot();
-    pilot.assignShip(ship)
+    pilot.assignShip(ship);
+    pilot.setAreaOfAction({x:0, y:0}, 40000);
     self.ships.push(ship);
     self.pilots.push(pilot);
     return ship;
@@ -24,7 +25,9 @@ Crafty.scene('Planet', (function() {
     var ship = Crafty.e(type).at(pos[0], pos[1]);
     ship.faction = faction;
     var pilot = new window.gatedown.src.pilot();
-    pilot.assignShip(ship)
+    pilot.assignShip(ship);
+    pilot.setAreaOfAction({x:0, y:0}, 40000);
+
     self.ships.push(ship);
     self.pilots.push(pilot)
     return ship;

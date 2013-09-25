@@ -18,12 +18,15 @@ Crafty.c('Bullet', {
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
   },
-  shoot: function(owner, activateBulletAfter) {
+  shoot: function(owner, activateBulletAfter, origin) {
+    if(!origin) {
+      origin = owner;
+    }
     this.attr({
-      heading: owner.heading,
-      x: owner.x,
-      y: owner.y,
-      rotation: owner.heading,
+      heading: origin.heading,
+      x: origin.x,
+      y: origin.y,
+      rotation: origin.heading,
       owner: owner,
       activateBulletAfter: activateBulletAfter
     });

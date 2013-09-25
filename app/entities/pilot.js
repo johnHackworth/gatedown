@@ -33,6 +33,10 @@ window.gatedown.src.pilot.prototype = {
   joinFormation: function() {
     this.formationLoose = false;
   },
+  setAreaOfAction: function(center, radius) {
+    this.centerOfAction = center;
+    this.radiusOfAction = radius;
+  },
   chooseTarget: function() {
     if(!this.ship) return;
     this.lastTargetCheck = this.counter;
@@ -59,11 +63,20 @@ window.gatedown.src.pilot.prototype = {
       // console.log(this.counter, this.THINK_TURN)
       return;
     }
-    if(this.squadronLeader) {
-      this.squadronAction();
-    } else {
-      this.freeAction();
+    if(!this.insideAreaOfAction()) {
+      return this.returnToAreaOfAction();
     }
+    if(this.squadronLeader) {
+      return this.squadronAction();
+    } else {
+      return this.freeAction();
+    }
+  },
+  insideAreaOfAction: function() {
+    return this.ship.distanceTo(this.centerOfAction) < this.radiusOfAction;
+  },
+  returnToAreaOfAction: function() {
+    this.ship.intendedDirection = this.ship.getAngleTo(this.centerOfAction);
   },
   freeAction: function() {
     if(Math.random() * 100 < this.hability && Math.random() > 0.7) {
