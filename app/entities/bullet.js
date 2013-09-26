@@ -12,7 +12,7 @@ Crafty.c('Bullet', {
 
 
   },
-  velocity: 15,
+  velocity: 20,
   maxVelocity: 20,
   heading: 0,
   initBindings: function() {

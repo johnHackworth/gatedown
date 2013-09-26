@@ -26,11 +26,23 @@ window.gatedown.src.pilot.prototype = {
     ship.pilot = this;
     this.ship = ship;
     this.MIN_DISTANCE = this.ship.w * 1.5;
+    this.ship.bind('destroyShip', this.notifyDestroy.bind(this));
+    this.ship.bind('hit', this.notifyHeavyDamage.bind(this));
+  },
+  notifyDestroy: function() {
+    this.sendRadioMessage(this.name + ' destroyed')
+  },
+  notifyHeavyDamage: function() {
+    if(this.ship.hullIntegrity <= 1) {
+      this.sendRadioMessage('mayday! mayday!')
+    }
   },
   breakFormation: function() {
+    this.sendRadioMessage(this.squadronName + ': dissengage formation');
     this.formationLoose = true;
   },
   joinFormation: function() {
+    this.sendRadioMessage(this.squadronName + ': engage formation');
     this.formationLoose = false;
   },
   setAreaOfAction: function(center, radius) {
@@ -55,6 +67,9 @@ window.gatedown.src.pilot.prototype = {
     }
     if(nearestShip) {
       this.attackingTarget = nearestShip;
+      if(Math.random() * 100 < 4) {
+        this.sendPublicMessage('Die, you pig')
+      }
     }
   },
   action: function() {
@@ -267,7 +282,43 @@ window.gatedown.src.pilot.prototype = {
     for(var i = 0, l = this.squadron.length; i < l; i++) {
       this.squadron[i].shoot();
     }
+  },
+  sendRadioMessage: function(text ) {
+    if(!this.lastMessage ||
+      this.lastMessage.message.text != text ||
+      this.counter - this.lastMessage.counter > 20
+    ) {
+      var message = {
+        channel: this.ship.faction,
+        origin: this,
+        text: text
+      }
+      this.lastMessage = {
+        message: message,
+        counter: this.counter
+      }
+      Crafty.trigger('radioMessage', message);
+    }
+  },
+  sendPublicMessage: function(text ) {
+    if(!this.lastMessage ||
+      this.lastMessage.message.text != text ||
+      this.counter - this.lastMessage.counter > 20
+    ) {
+      var message = {
+        channel: 0,
+        origin: this,
+        text: text
+      }
+      this.lastMessage = {
+        message: message,
+        counter: this.counter
+      }
+      Crafty.trigger('radioMessage', message);
+    }
   }
+
+
 
 
 }

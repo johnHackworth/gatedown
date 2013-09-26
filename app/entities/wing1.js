@@ -11,7 +11,6 @@ Crafty.c('RightWing1', {
   },
   shoot: function() {
     if(!this.lastShot || this.counter - this.lastShot > 5) {
-      console.log('bang')
       this.lastShot = this.counter;
       var activateBulletAfter = 15;
       Crafty.e('Bullet').shoot(this.owner, activateBulletAfter, this).color('#FF0000');
@@ -27,7 +26,6 @@ Crafty.c('LeftWing1', {
   },
   shoot: function() {
     if(!this.lastShot || this.counter - this.lastShot > 5) {
-      console.log('bang')
       this.lastShot = this.counter;
       var activateBulletAfter = 15;
       Crafty.e('Bullet').shoot(this.owner, activateBulletAfter, this).color('#FF0000');
