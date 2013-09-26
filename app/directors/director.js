@@ -7,8 +7,8 @@ window.gatedown.src.Director = function() {
 
 };
 window.gatedown.config = {
-  width: 600,
-  height: 400,
+  width: 800,
+  height: 600,
   fps: 30
 }
 window.gatedown.src.Director.prototype = {

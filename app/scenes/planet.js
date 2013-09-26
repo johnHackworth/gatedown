@@ -67,11 +67,11 @@ Crafty.scene('Planet', (function() {
   this.createGroup('Ship1', [20,20], 3, 2, this.playerShip);
   this.createGroup('Ship1', [-50,20], 3, 2);
 
-  this.createGroup('Ship2', [Math.floor(Math.random() * 3000),Math.floor(Math.random() * 3000)], Math.floor(Math.random() * 6), 1);
-  this.createGroup('Ship2', [Math.floor(Math.random() * 3000),Math.floor(Math.random() * 3000)], Math.floor(Math.random() * 6), 1);
-  this.createGroup('Ship2', [Math.floor(Math.random() * 3000),Math.floor(Math.random() * 3000)], Math.floor(Math.random() * 6), 1);
-  this.createGroup('Ship2', [Math.floor(Math.random() * 3000),Math.floor(Math.random() * 3000)], Math.floor(Math.random() * 6), 1);
-  this.createGroup('Ship2', [Math.floor(Math.random() * 3000),Math.floor(Math.random() * 3000)], Math.floor(Math.random() * 6), 1);
+  this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], Math.floor(Math.random() * 6), 1);
+  this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], Math.floor(Math.random() * 6), 1);
+  this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], Math.floor(Math.random() * 6), 1);
+  this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], Math.floor(Math.random() * 6), 1);
+  this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], Math.floor(Math.random() * 6), 1);
 
 
 

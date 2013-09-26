@@ -18,6 +18,8 @@ window.gatedown.src.pilot.prototype = {
   counter: 0,
   deattachedDistance: 300,
   formationLoose: false,
+  freeActionTime: 0,
+  stoppedTime: 0,
   init: function() {
     this.squadron = [];
     this.THINK_TURN = Math.floor(Math.random() * this.THINK_DELTA);
@@ -123,17 +125,30 @@ window.gatedown.src.pilot.prototype = {
 
     }
   },
+  checkSquadronFreeInitiative: function() {
+    if(this.ship.velocity == 0) {
+      this.stoppedTime++;
+      if(this.stoppedTime > 100) {
+        this.freeActionTime = 100;
+      }
+    }
+
+    if(this.freeActionTime) {
+      this.freeActionTime--;
+    }
+  },
   squadronAction: function() {
+    this.checkSquadronFreeInitiative()
     if(
       this.ship.distanceTo(this.squadronLeader.ship) > this.deattachedDistance ||
       this.squadronLeader.ship.outOfControl ||
-      this.squadronLeader.formationLoose
+      this.squadronLeader.formationLoose ||
+      this.freeActionTime
     ) {
-      this.freeAction();
+      return this.freeAction();
     } else {
 
       if(Math.random() * 1 < this.hability) {
-
         if(this.canCrash()) {
           if(this.ship.velocity <= 1) {
             this.ship.intendedDirection = this.ship.heading + 90 % 360;
