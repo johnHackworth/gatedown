@@ -17,6 +17,7 @@ Crafty.c('Bullet', {
   heading: 0,
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
+    this.onHit("Ship", this.shipHit.bind(this));
   },
   shoot: function(owner, activateBulletAfter, origin) {
     if(!origin) {
@@ -38,9 +39,7 @@ Crafty.c('Bullet', {
     if(this.counter > this.activateBulletAfter) {
       this.active = true;
     }
-    if(this.hit('Ship') && this.active) {
-      this.destroy();
-    }
+
     this.inertia();
     if(this.counter > 40) {
       this.destroy();
@@ -60,5 +59,13 @@ Crafty.c('Bullet', {
     this.x = newX;
     this.y = newY;
   },
+  shipHit: function(ships) {
+    for(var n in ships) {
+      if(ships[n] != this.owner) {
+        this.destroy();
+        return;
+      }
+    }
+  }
 });
 

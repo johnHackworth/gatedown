@@ -7,16 +7,18 @@ window.gatedown.src.Director = function() {
 
 };
 window.gatedown.config = {
-  width: 800,
-  height: 600,
-  fps: 30
+  width: 600,
+  height: 400,
+  fps: 20
 }
 window.gatedown.src.Director.prototype = {
-  backgroundColor: '#333333',
+  backgroundColor: '#CCCCCC',
   start: function() {
     // Start crafty and set a background color so that we can see it's working
     Crafty.init(window.gatedown.config.width, window.gatedown.config.height);
     Crafty.background(this.backgroundColor);
+    this.missionControl = new window.gatedown.src.MissionControl();
     Crafty.scene('Planet')
+
   }
 }

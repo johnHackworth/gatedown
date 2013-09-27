@@ -31,10 +31,16 @@ Crafty.c("Radio", {
     this.x = this.xPos - Crafty.viewport.x;
     this.y = this.yPos - Crafty.viewport.y;
     var i = 0;
+    var color = '#FFFFFF';
     while(i<10) {
       if(this.messages[i]) {
+        if(this.messages[i].origin.ship.faction == 2) {
+          color = '#FFFFFF'
+        } else {
+          color = '#FF0000'
+        }
         this.texts[i].text(this.messages[i].origin.name + ': ' + this.messages[i].text)
-          .textColor('#FFFFFF', 0.1 * (10/(i+1)))
+          .textColor(color, 0.1 * (10/(i+1)))
           .at(this.x, this.y + i*15)
       }
       i++;

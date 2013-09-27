@@ -4,13 +4,15 @@ Crafty.c('Radar', {
   enemyColor: '#FF0000',
   textToDisplay: 'radar',
   pointSize: 1,
-  init: function(a) {
+  init: function() {
     this.requires('2D, Canvas')
     this.xPos = window.gatedown.config.width - 70;
     this.yPos = window.gatedown.config.height - 70;
     this.ready = true;
     this.bind('Draw', this._draw.bind(this))
     this.context = Crafty.canvas.context;
+    this.ready = true;
+
   },
   text: function(text) {
     this.textToDisplay = text;

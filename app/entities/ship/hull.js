@@ -100,7 +100,7 @@ Crafty.c('Hull1', {
     }
     if(this.hit('Ship')) {
       var ship = elements[0].obj;
-      var shipDirection = ship.getAngleTo(ship)
+      var shipDirection = ship.getAngleTo(this)
       var modifAngle = ((this.heading - shipDirection)) % 360;
       this.intendedHeading = ((this.heading + modifAngle)) % 360;
       this.outOfControl = 30;

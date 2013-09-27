@@ -7,6 +7,7 @@ window.gatedown.src.pilot = function() {
 
 window.gatedown.src.pilot.prototype = {
   SHIP_NEARBY: 600,
+  SHOOTING_DISTANCE: 500,
   DANGEROUS_BULLET: 500,
   THINK_DELTA: 5,
   MIN_DISTANCE: 10,
@@ -69,7 +70,7 @@ window.gatedown.src.pilot.prototype = {
     }
     if(nearestShip) {
       this.attackingTarget = nearestShip;
-      if(Math.random() * 100 < 4) {
+      if(Math.random() * 100 < 1) {
         this.sendPublicMessage('Die, you pig')
       }
     }
@@ -77,7 +78,6 @@ window.gatedown.src.pilot.prototype = {
   action: function() {
     this.counter++;
     if(!(this.counter % this.THINK_DELTA == 0)) {
-      // console.log(this.counter, this.THINK_TURN)
       return;
     }
     if(!this.insideAreaOfAction()) {
@@ -95,6 +95,20 @@ window.gatedown.src.pilot.prototype = {
   returnToAreaOfAction: function() {
     this.ship.intendedDirection = this.ship.getAngleTo(this.centerOfAction);
   },
+  shipInFront: function() {
+    var ships = Crafty('Ship');
+    var otherShip = null;
+    for(var i = ships.length - 1; i >= 0; i--) {
+      otherShip = Crafty(ships[i]);
+      if(this.ship.distanceTo(otherShip) < this.SHOOTING_DISTANCE &&
+        Math.abs(this.ship.getAngleTo(otherShip) - this.ship.heading) < 20 &&
+        this.ship.faction !== otherShip.faction
+      ) {
+        return true;
+      }
+    }
+    return false;
+  },
   freeAction: function() {
     if(Math.random() * 100 < this.hability && Math.random() > 0.7) {
 
@@ -109,12 +123,12 @@ window.gatedown.src.pilot.prototype = {
       } else {
         var incomingBullets = this.lookForBullets();
         if(incomingBullets.length > 0) {
-          if(this.debug) console.log('-skip-', incomingBullets.length)
           this.skipBullets(incomingBullets);
+          if(this.shipInFront()) {
+            this.shoot();
+          }
         } else {
-          if(this.debug) console.log('-attack-')
           if(!this.attackingTarget || this.counter - this.lastTargetCheck > 15) {
-            if(this.debug) console.log('-target-')
             this.chooseTarget();
           }
           if(this.attackingTarget) {
@@ -126,9 +140,9 @@ window.gatedown.src.pilot.prototype = {
     }
   },
   checkSquadronFreeInitiative: function() {
-    if(this.ship.velocity == 0) {
+    if(this.ship.velocity <= 0.5) {
       this.stoppedTime++;
-      if(this.stoppedTime > 100) {
+      if(this.stoppedTime > 30) {
         this.freeActionTime = 100;
       }
     }
@@ -168,6 +182,9 @@ window.gatedown.src.pilot.prototype = {
             }
             if((distanceToLeader - correctDistance) < this.MIN_DISTANCE_TO_LEADER) {
               this.ship.deccelerate();
+            }
+            if(!this.inPosition && this.shipInFront()) {
+              this.shoot();
             }
           // }
           this.followSquadron();

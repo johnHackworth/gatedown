@@ -3,8 +3,8 @@ Crafty.sprite('assets/little_ship1.png', {sprShip: [0,0,10,9]})
 
 Crafty.c('Ship1', {
   acceleration: 1,
-  turningRadius: 4,
-  baseTurningRadius: 4,
+  turningRadius: 3,
+  baseTurningRadius: 3,
   velocity: 0 ,
   hullIntegrity: 3,
   maxVelocity: 4,
