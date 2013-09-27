@@ -3,7 +3,7 @@ Crafty.c('Hull1', {
   init: function() {
     this.requires('Entity, Color, Solid, Keyboard, Collision')
       .stopOnSolids()
-      .hitByBullet()
+      .hitByBullet();
     this.initBindings();
     this.counter = 0;
     this.explosion = Crafty.e('Explosion');
@@ -54,11 +54,12 @@ Crafty.c('Hull1', {
     return this;
   },
   hitByBullet: function() {
-    this.onHit('Bullet', this.bulletImpact.bind(this));
+    // this.onHit('Bullet', this.bulletImpact.bind(this));
   },
   bulletImpact: function(bullets) {
     for(var i = 0, l = bullets.length; i < l; i++) {
-      if(bullets[i].obj.owner != this) {
+      var bullet = Crafty(bullets[i]);
+      if(bullet.owner != this) {
         if(!this.lastImpact ||this.counter - this.lastImpact > 20) {
           this.hullIntegrity--;
           this.trigger('hit')
@@ -69,12 +70,6 @@ Crafty.c('Hull1', {
             this.trigger('destroyShip');
             this.destroy();
           }
-        }
-
-
-        // this.stopMovement();
-        if(bullets[i] && bullets[i].obj && bullets[i].obj.destroy) {
-          bullets[i].obj.destroy();
         }
       }
     }

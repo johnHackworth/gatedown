@@ -61,7 +61,8 @@ Crafty.c('Bullet', {
   },
   shipHit: function(ships) {
     for(var n in ships) {
-      if(ships[n] != this.owner) {
+      if(ships[n].obj != this.owner) {
+        ships[n].obj.bulletImpact(this);
         this.destroy();
         return;
       }

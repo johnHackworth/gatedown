@@ -13,6 +13,8 @@ Crafty.c('Grid', {
     if (x === undefined && y === undefined) {
       return { x: this.x, y: this.y }
     } else {
+      this.atX = x;
+      this.atY = y;
       this.attr({ x: x, y: y });
       return this;
     }
