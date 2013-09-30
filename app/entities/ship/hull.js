@@ -27,9 +27,7 @@ Crafty.c('Hull1', {
       if(!this.playerControlled) {
         this.think();
         this.maniobrate();
-      } else {
-        this.checkKeyboardEvents();
-      };
+      }
     } else {
       this.outOfControl--;
       this.maniobrate();

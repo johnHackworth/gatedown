@@ -67,9 +67,10 @@ Crafty.c('Radar', {
         } else {
           ctx.fillStyle = this.enemyColor;
         }
+        var pointSizeCorrector = this.ships[i].w > 50? 2: 1;
         xPoint = this.x + distanceX / this.scale;
         yPoint = this.y + distanceY / this.scale
-        ctx.fillRect(xPoint,yPoint,this.pointSize, this.pointSize)
+        ctx.fillRect(xPoint,yPoint,this.pointSize * pointSizeCorrector, this.pointSize * pointSizeCorrector)
       }
     };
   ctx.fillStyle = "rgba(255,255,255,0.5)";

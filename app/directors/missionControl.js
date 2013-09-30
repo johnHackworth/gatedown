@@ -50,7 +50,7 @@ window.gatedown.src.MissionControl.prototype = {
 
   randomEncounter: function() {
     var friendlySquadronNumber = Math.ceil(Math.random() * 2);
-    var foeSquadronNumber = Math.ceil(Math.random() * 8);
+    var foeSquadronNumber = Math.ceil(Math.random() * 3);
 
     this.createPlayerShip();
     this.playerShip.at(-3100, -3000)
@@ -62,8 +62,15 @@ window.gatedown.src.MissionControl.prototype = {
     for(foeSquadronNumber; foeSquadronNumber; foeSquadronNumber--) {
       this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], 3, 1);
     }
-    var station = this.createShip('Station1', [0,0], 2);
-    station.pilot.name = 'Station leader';
+
+    var station = Crafty.e('Station1').at(-40,-40)
+    station.faction = 1;
+    for(var i =1; i <= 4; i++) {
+      var gunner = new window.gatedown.src.gunner();
+      // debugger;
+      gunner.assignTurret(station['turret'+i])
+    }
+    // station.pilot.name = 'Station leader';
     this.ships.push(station);
   },
   stationAttackTest: function() {
@@ -73,6 +80,13 @@ window.gatedown.src.MissionControl.prototype = {
 
     // var station = this.createShip('Station1', [0,0], 2);
     // station.pilot.name = 'Station leader';
-    var station = Crafty.e('Station1').at(0,0)
+
+    var station = Crafty.e('Station1').at(-40,-40)
+    for(var i =1; i <= 4; i++) {
+      var gunner = new window.gatedown.src.gunner();
+      // debugger;
+      gunner.assignTurret(station['turret'+i])
+    }
+
   }
 }

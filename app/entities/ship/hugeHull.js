@@ -15,13 +15,19 @@ Crafty.c('HugeHull', {
   },
   tick: function() {
     this.counter++;
-
     this.heading = this.counter / 10;
+    this.origin("center")
+    this.rotation = this.heading;
 
     if(this.hullIntegrity <= 1 && this.counter % 20 == 0) {
       this.explosion.smoke([this.x, this.y]);
     } else if(this.hullIntegrity <= 2 && this.counter % 20 == 0) {
       this.explosion.lightSmoke([this.x, this.y]);
+    }
+    if(this.turrets) {
+      for(var i = this.turrets.length; i; i--) {
+        this.turrets[i-1].gunner && this.turrets[i-1].gunner.action();
+      }
     }
   },
   stopOnSolids: function() {
@@ -41,7 +47,7 @@ Crafty.c('HugeHull', {
           this.lastImpact = this.counter;
 
           if(this.hullIntegrity <= 0) {
-            this.explosion.explode([bullet.x,bullet.y]);
+            this.explosion.explodeDouble([bullet.x,bullet.y]);
             this.trigger('destroySpaceship');
             this.destroy();
           } else {

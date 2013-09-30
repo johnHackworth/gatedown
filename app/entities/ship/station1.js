@@ -15,18 +15,45 @@ Crafty.c('Station1', {
     this.requires('Ship, HugeHull, Color, sprStation')
       .color('transparent')
     this.hull = this.requires('');
-    this.hull.resize(150,146)
+    this.hull.resize(110,110)
     this.counter = 0;
     this.collision(
-      new Crafty.circle(75,75,75)
+      new Crafty.circle(55,55,55)
     );
-    this.bind('EnterFrame', this.tick.bind(this));
+    this.initComponents();
   },
-  at: function(x,y) {
-    this.x = x - 150;
-    this.y = y - 146;
+  initComponent: function(component, name, position, rotation) {
+    this.components[name] = Crafty.e(component);
+
+    this.components[name].attach(this);
+    this.components[name].rotation = rotation;
   },
-  tick: function() {
-    console.log(this.counter);
-  }
+  shoot: function() {
+    if(this.counter % 25 === 0) {
+      this.turret1.shoot();
+      this.turret2.shoot();
+      this.turret3.shoot();
+      this.turret4.shoot();
+    }
+  },
+  initComponents: function() {
+    this.components = {};
+    this.turrets = [];
+    this.turret1 = Crafty.e('Turret1').at(110,55)
+    this.turret1.set(55,55,0,this);
+
+    this.turret2 = Crafty.e('Turret1').at(110,55)
+    this.turret2.set(55,55,270,this);
+
+    this.turret3 = Crafty.e('Turret1').at(110,55)
+    this.turret3.set(55,55,90,this);
+
+    this.turret4 = Crafty.e('Turret1').at(110,55)
+    this.turret4.set(55,55,180,this);
+
+    this.turrets.push(this.turret1);
+    this.turrets.push(this.turret2);
+    this.turrets.push(this.turret3);
+    this.turrets.push(this.turret4);
+  },
 });

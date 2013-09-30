@@ -5,7 +5,7 @@ Crafty.c('Explosion', {
   size: 30 / 2,
   sizeSmall: 30 / 4,
   init: function() {
-    this.requires('Entity, sprExplosion,  SpriteAnimation')
+    this.requires('Entity, sprExplosion, Tween, SpriteAnimation')
       .animate('bigExplosion', 0, 0, 8)
       .animate('smallExplosion', 0, 0, 1)
       .animate('smoke', 0, 1, 4)
@@ -64,6 +64,12 @@ Crafty.c('Explosion', {
     this.at(at[0] - this.size,at[1] - this.size)
     this.visible = true;
     this.animate('bigExplosion', 4, 1)  ;
+  },
+  explodeDouble: function(at) {
+    this.at(at[0] - this.size,at[1] - this.size)
+    this.visible = true;
+    this.tween({w:100, h:100}, 50);
+    this.animate('bigExplosion', 4, 3)  ;
   },
   sparks: function(at) {
     this.at(at[0] - this.size,at[1] - this.size)
