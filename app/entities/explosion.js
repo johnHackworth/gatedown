@@ -68,8 +68,8 @@ Crafty.c('Explosion', {
   explodeDouble: function(at) {
     this.at(at[0] - this.size,at[1] - this.size)
     this.visible = true;
-    this.tween({w:100, h:100}, 50);
-    this.animate('bigExplosion', 4, 3)  ;
+    this.tween({w:150, h:150}, 50);
+    this.animate('bigExplosion', 4, 8)  ;
   },
   sparks: function(at) {
     this.at(at[0] - this.size,at[1] - this.size)

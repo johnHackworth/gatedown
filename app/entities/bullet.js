@@ -3,9 +3,10 @@ Crafty.c('Bullet', {
   tileHeight: 1,
   w: 5,
   h: 1,
+  color: '#00FFFF',
   init: function(options) {
     this.requires('Entity, Color, Collision')
-      .color('#00FFFF')
+      .color(this.color)
       .resize(5,1);
     this.initBindings();
     this.counter = 0;
@@ -70,3 +71,20 @@ Crafty.c('Bullet', {
   }
 });
 
+Crafty.c('BulletLong', {
+  w: 8,
+  h: 2,
+  color: '#FF00FF',
+  init: function(options) {
+    this.requires('Bullet')
+      .color(this.color)
+      .resize(8,2);
+    this.initBindings();
+    this.counter = 0;
+
+
+  },
+  velocity: 25,
+  maxVelocity: 25
+
+})

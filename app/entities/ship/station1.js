@@ -6,7 +6,7 @@ Crafty.c('Station1', {
   turningRadius: 0,
   baseTurningRadius: 0,
   velocity: 0 ,
-  hullIntegrity: 30,
+  hullIntegrity: 60,
   maxVelocity: 0,
   heading: 0,
   centered: false,
@@ -29,7 +29,7 @@ Crafty.c('Station1', {
     this.components[name].rotation = rotation;
   },
   shoot: function() {
-    if(this.counter % 25 === 0) {
+    if(this.counter % 10 === 0) {
       this.turret1.shoot();
       this.turret2.shoot();
       this.turret3.shoot();

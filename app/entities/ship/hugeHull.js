@@ -49,7 +49,7 @@ Crafty.c('HugeHull', {
           if(this.hullIntegrity <= 0) {
             this.explosion.explodeDouble([bullet.x,bullet.y]);
             this.trigger('destroySpaceship');
-            this.destroy();
+            setTimeout(this.destroy.bind(this),3500);
           } else {
             this.explosion.sparks([bullet.x, bullet.y]);
           }

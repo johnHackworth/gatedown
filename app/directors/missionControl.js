@@ -74,7 +74,7 @@ window.gatedown.src.MissionControl.prototype = {
     var foeSquadronNumber = Math.ceil(Math.random() * 3);
 
     this.createPlayerShip();
-    this.playerShip.at(-17100, -3000)
+    this.playerShip.at(-3100, -3000)
     this.createGroup('Ship1', [-3100,-3000], 3, 2, this.playerShip);
     for(friendlySquadronNumber; friendlySquadronNumber; friendlySquadronNumber--) {
       this.createGroup('Ship1', [-3100 + 100 * friendlySquadronNumber, -3000], 3, 2);
