@@ -16,10 +16,22 @@ window.gatedown.src.MissionControl.prototype = {
   options: {
     size: [50000, 50000]
   },
+  shipDestroyed: function() {
+    var ships = Crafty('Ship');
+    var ship = null;
+    var playerFaction = this.playerShip.faction;
+    var remainingShips = [0,0,0,0]
+    for(var i = ships.length - 1; i >= 0; i--) {
+      ship = Crafty(ships[i]);
+      remainingShips[ship.faction]++;
+    }
+    console.log('REMAINGIN SHIPS:', remainingShips[1], remainingShips[2])
+  },
   createShip: function(type, pos, faction) {
     var ship = Crafty.e(type).at(pos[0], pos[1]);
     ship.faction = faction;
     ship.actionArea = this.options.size;
+    ship.bind('destroyShip', this.shipDestroyed.bind(this));
     var pilot = new window.gatedown.src.pilot();
     pilot.assignShip(ship);
     pilot.setAreaOfAction({x:0, y:0}, 40000);
