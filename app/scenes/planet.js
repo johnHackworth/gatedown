@@ -7,21 +7,23 @@ window.gatedown.app.scenes.planet = {};
 
 Crafty.scene('Planet', (function() {
   var self = this;
+  this.TOTAL_WIDTH = 50000;
+  this.TOTAL_HEIGHT = 50000;
 
   this.bg = Crafty.e("2D, Canvas, Image")
-             .attr({x:-25000, y: -25000, w: 50000, h:50000})
+             .attr({x:0-this.TOTAL_WIDTH / 2, y: 0-this.TOTAL_HEIGHT/2, w: this.TOTAL_WIDTH, h:this.TOTAL_HEIGHT})
              .image("http://fc09.deviantart.net/fs71/i/2011/078/a/a/simplistic_space_background_by_swordkirby9999-d3c04tz.jpg", "repeat");
 
   this.showHelpWindow = function() {
-      console.log(self.helpWindow)
-
-    if(!self.helpWindow) {
-      self.helpWindow = Crafty.e("HelpWindow");
+    if(self.helpWindow) {
+      self.helpWindow.destroy();
+      delete self.helpWindow;
     }
+    self.helpWindow = Crafty.e("HelpWindow");
   }
 
   this.control = window.gatedown.app.director.missionControl;
-  this.control.randomEncounter()
+  this.control.randomEncounter({size:[this.TOTAL_WIDTH, this.TOTAL_HEIGHT]})
 
   this.keyListener = Crafty.e("KeyListener");
   this.keyListener.set(this);

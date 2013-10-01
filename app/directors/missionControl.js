@@ -13,9 +13,13 @@ window.gatedown.src.MissionControl.prototype = {
     1: ['Red', 'Blue', 'Yellow', 'Purple', 'Black', 'White'],
     2: ['Phoenix', 'Dragon', 'Salamander', 'Badger', 'Eagle', 'Fox']
   },
+  options: {
+    size: [50000, 50000]
+  },
   createShip: function(type, pos, faction) {
     var ship = Crafty.e(type).at(pos[0], pos[1]);
     ship.faction = faction;
+    ship.actionArea = this.options.size;
     var pilot = new window.gatedown.src.pilot();
     pilot.assignShip(ship);
     pilot.setAreaOfAction({x:0, y:0}, 40000);
@@ -40,20 +44,37 @@ window.gatedown.src.MissionControl.prototype = {
     }
   },
   createPlayerShip: function() {
+    var self = this;
+    var sayStatusWindow = function(text) {
+      if(!self.playerShip.statusWindow) {
+        self.playerShip.statusWindow = Crafty.e('ShipStatusWindow')
+      }
+      self.playerShip.statusWindow.clear();
+      self.playerShip.statusWindow.say(text)
+    }
+
     this.playerShip = Crafty.e('Ship1').at(0,0);
     this.playerShip.faction = 2;
+    this.playerShip.actionArea = this.options.size;
     var pilot = new window.gatedown.src.pilot();
     pilot.assignShip(this.playerShip)
     this.playerShip.humanPlayer();
     this.playerShip.centerOfAction();
+
+    this.playerShip.bind('leavingActionArea1', function(){sayStatusWindow('Leaving the mission area in 3')});
+    this.playerShip.bind('leavingActionArea2', function(){sayStatusWindow('Leaving the mission area in 2')});
+    this.playerShip.bind('leavingActionArea3', function(){sayStatusWindow('Leaving the mission area in 1')});
+    this.playerShip.bind('jumpingOut', function() {sayStatusWindow('Jumped back to base');});
+    this.playerShip.bind('returnedToActionArea', function(){sayStatusWindow('');});
   },
 
-  randomEncounter: function() {
+  randomEncounter: function(options) {
+    this.options = options;
     var friendlySquadronNumber = Math.ceil(Math.random() * 2);
     var foeSquadronNumber = Math.ceil(Math.random() * 3);
 
     this.createPlayerShip();
-    this.playerShip.at(-3100, -3000)
+    this.playerShip.at(-17100, -3000)
     this.createGroup('Ship1', [-3100,-3000], 3, 2, this.playerShip);
     for(friendlySquadronNumber; friendlySquadronNumber; friendlySquadronNumber--) {
       this.createGroup('Ship1', [-3100 + 100 * friendlySquadronNumber, -3000], 3, 2);

@@ -4,7 +4,7 @@ Crafty.c('ModalWindow', {
   init: function() {
     this.requires('2d, Canvas, Text, Color')
     this.initialize();
-    // this.ready = false;
+    this.ready = true;
   },
   initialize: function() {
     this.color(this.backgroundColor);
@@ -30,11 +30,14 @@ Crafty.c('ModalWindow', {
       }
     }
   },
-  addText: function(text, x, y) {
+  addText: function(text, x, y, color, style) {
+    style = style? style: {};
     this.texts.push( {
       text:text,
       x:x,
-      y:y
+      y:y,
+      color: color,
+      style: style
     })
 
     this.drawnTexts.push(Crafty.e('Text, Entity'))
@@ -50,12 +53,22 @@ Crafty.c('ModalWindow', {
     this.w = this.width;
     this.h = this.height;
     var i = 0;
-    var color = '#BB3333';
+    var color = '#333333';
+    var textColor = color;
     for(var i = 0, l = this.texts.length; i < l; i++) {
+      textColor = this.texts[i].color ? this.texts[i].color : color;
       this.drawnTexts[i].text(this.texts[i].text)
-        .textColor(color)
+        .textColor(textColor)
+        .textFont(this.texts[i].style)
         .at(this.x + this.texts[i].x, this.y + this.texts[i].y)
-    }
-  }
 
+    }
+  },
+  clear: function() {
+    this.texts = [];
+    for(var i = 0, l = this.drawnTexts.length; i < l; i++) {
+      this.drawnTexts[i].destroy();
+    }
+    this.drawnTexts = [];
+  }
 });

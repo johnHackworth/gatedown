@@ -31,6 +31,7 @@ window.gatedown.src.pilot.prototype = {
     this.MIN_DISTANCE = this.ship.w * 1.5;
     this.ship.bind('destroyShip', this.notifyDestroy.bind(this));
     this.ship.bind('hit', this.notifyHeavyDamage.bind(this));
+    this.ship.bind('leavingActionArea1', this.notifyLeavingActionArea.bind(this))
   },
   notifyDestroy: function() {
     this.sendRadioMessage(this.name + ' destroyed')
@@ -38,6 +39,11 @@ window.gatedown.src.pilot.prototype = {
   notifyHeavyDamage: function() {
     if(this.ship.hullIntegrity <= 1) {
       this.sendRadioMessage('mayday! mayday!')
+    }
+  },
+  notifyLeavingActionArea: function() {
+    if(this.ship.playerControlled) {
+      this.sendRadioMessage('Leaving the action area... getting ready to jump')
     }
   },
   breakFormation: function() {
