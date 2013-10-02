@@ -4,7 +4,7 @@ window.gatedown.app = window.gatedown.app || {};
 
 
 window.gatedown.src.MissionControl = function() {
-
+  this.missionGenerator = new window.gatedown.src.MissionGenerator(this);
 };
 window.gatedown.src.MissionControl.prototype = {
   pilots: [],
@@ -16,7 +16,26 @@ window.gatedown.src.MissionControl.prototype = {
   options: {
     size: [50000, 50000]
   },
+  initializeObjetives: function(primary, secondary) {
+    this.primaryObjetive = primary;
+    this.secondaryObjective = secondary;
+    alert(this.primaryObjetive.text);
+    this.objetiveInterval = setInterval(this.checkObjetives.bind(this), 3000);
+  },
+  checkObjetives: function() {
+    if(this.primaryObjetive.condition() && !this.primaryCompleted) {
+      alert('primary objetive completed');
+      this.primaryCompleted = true;
+    }
+    if(this.secondaryObjective.condition() && !this.secondaryCompleted) {
+      alert('secondary objetive completed')
+      this.secondaryCompleted = true;
+    }
+  },
   shipDestroyed: function() {
+
+  },
+  remainingShips: function() {
     var ships = Crafty('Ship');
     var ship = null;
     var playerFaction = this.playerShip.faction;
@@ -25,7 +44,7 @@ window.gatedown.src.MissionControl.prototype = {
       ship = Crafty(ships[i]);
       remainingShips[ship.faction]++;
     }
-    console.log('REMAINGIN SHIPS:', remainingShips[1], remainingShips[2])
+    return remainingShips;
   },
   createShip: function(type, pos, faction) {
     var ship = Crafty.e(type).at(pos[0], pos[1]);
@@ -80,6 +99,13 @@ window.gatedown.src.MissionControl.prototype = {
     this.playerShip.bind('returnedToActionArea', function(){sayStatusWindow('');});
   },
 
+  createPlayerGroup: function(type, pos, number, faction) {
+    this.createPlayerShip();
+    this.playerShip.at(pos[0], pos[1])
+    this.createGroup(type, pos, number, faction, this.playerShip);
+
+  },
+
   randomEncounter: function(options) {
     this.options = options;
     var friendlySquadronNumber = Math.ceil(Math.random() * 2);
@@ -120,6 +146,29 @@ window.gatedown.src.MissionControl.prototype = {
       // debugger;
       gunner.assignTurret(station['turret'+i])
     }
+  },
+  clearAreaMission: function (level) {
+    var type = this.missionGenerator.types.clearArea;
+    var enemyForces = type.enemyForces(level);
+    var alliedForces = type.alliedForces(level);
+    for(var i = 0, l = enemyForces.length; i < l; i++) {
+      this.createGroup('Ship2',
+        enemyForces[i].initPoint,
+        enemyForces[i].number,
+        enemyForces[i].faction
+      );
+      console.log(enemyForces[i].faction);
+    }
+    this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
+    for(var i = 1, l = alliedForces.length; i < l; i++) {
+      this.createGroup('Ship1',
+        alliedForces[i].initPoint,
+        alliedForces[i].number,
+        alliedForces[i].faction
+      );
+      console.log(alliedForces[i].faction);
+    }
 
+    this.initializeObjetives(type.objetives[0], type.objetives[1]);
   }
 }

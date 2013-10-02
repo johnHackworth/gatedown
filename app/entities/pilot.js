@@ -59,11 +59,13 @@ window.gatedown.src.pilot.prototype = {
     this.radiusOfAction = radius;
   },
   chooseTarget: function() {
+
     if(!this.ship) return;
+
     this.lastTargetCheck = this.counter;
     var ships = Crafty('Ship');
     var nearestShip = null;
-    var nearestDistance = 10000;
+    var nearestDistance = 100000;
     var otherShip = null;
     for(var i = ships.length - 1; i >= 0; i--) {
       otherShip = Crafty(ships[i]);
