@@ -25,6 +25,15 @@ Crafty.scene('Planet', (function() {
   this.control = window.gatedown.app.director.missionControl;
   this.control.clearAreaMission(1)
 
+  setTimeout(function() {
+    self.missionWindow = Crafty.e('missionWindow');
+    self.missionWindow.initialize({
+      texts:[],
+      primaryObjetive: self.control.primaryObjetive.text,
+      secondaryObjetive: self.control.secondaryObjetive.text
+    })
+  }, 2000);
+
   this.keyListener = Crafty.e("KeyListener");
   this.keyListener.set(this);
 

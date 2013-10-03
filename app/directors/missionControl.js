@@ -18,8 +18,7 @@ window.gatedown.src.MissionControl.prototype = {
   },
   initializeObjetives: function(primary, secondary) {
     this.primaryObjetive = primary;
-    this.secondaryObjective = secondary;
-    alert(this.primaryObjetive.text);
+    this.secondaryObjetive = secondary;
     this.objetiveInterval = setInterval(this.checkObjetives.bind(this), 3000);
   },
   checkObjetives: function() {
@@ -27,7 +26,7 @@ window.gatedown.src.MissionControl.prototype = {
       alert('primary objetive completed');
       this.primaryCompleted = true;
     }
-    if(this.secondaryObjective.condition() && !this.secondaryCompleted) {
+    if(this.secondaryObjetive.condition() && !this.secondaryCompleted) {
       alert('secondary objetive completed')
       this.secondaryCompleted = true;
     }
