@@ -116,13 +116,14 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
   ],
   enemyForces: function(level) {
     level = level? level: 1;
-    var scoutSquadrons = 2 * level;
+    var scoutSquadrons = 4;
     var forces = [];
     var initPoint = [
       5000 - Math.random() * 10000,
       5000 - Math.random() * 10000
     ];
     this.objectiveShip = Crafty.e('Station1').at(initPoint[0],initPoint[1])
+    this.objectiveShip.faction = 1;
     for(var i =1; i <= 4; i++) {
       var gunner = new window.gatedown.src.gunner();
       // debugger;
