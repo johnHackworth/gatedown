@@ -129,7 +129,7 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
       gunner.assignTurret(this.objectiveShip['turret'+i])
     }
     for(var i = scoutSquadrons; i; i--) {
-      var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
+      var shipInitPoint = [initPoint[0] + 200 + i * 100, initPoint[1] + 200];
       forces.push({
         type: 2,
         number: 3,
@@ -137,7 +137,7 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
         name: 'tralara',
         mission: {
           type: "attack",
-          where: [[initPoint[0]-1000,initPoint[1]-1000], [initPoint[0]+1000,initPoint[1]+1000]]
+          where: [[initPoint[0]-2000,initPoint[1]-2000], [initPoint[0]+2000,initPoint[1]+2000]]
         },
         initPoint: shipInitPoint
       })
