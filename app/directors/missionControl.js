@@ -9,6 +9,8 @@ window.gatedown.src.MissionControl = function() {
 window.gatedown.src.MissionControl.prototype = {
   pilots: [],
   ships: [],
+  userFaction: 2,
+  enemyFaction: 1,
   squadronNames: {
     1: ['Red', 'Blue', 'Yellow', 'Purple', 'Black', 'White'],
     2: ['Phoenix', 'Dragon', 'Salamander', 'Badger', 'Eagle', 'Fox']
@@ -17,18 +19,38 @@ window.gatedown.src.MissionControl.prototype = {
     size: [50000, 50000]
   },
   initializeObjetives: function(primary, secondary) {
+    window.missionControl = this;
     this.primaryObjetive = primary;
     this.secondaryObjetive = secondary;
     this.objetiveInterval = setInterval(this.checkObjetives.bind(this), 3000);
   },
   checkObjetives: function() {
-    if(this.primaryObjetive.condition() && !this.primaryCompleted) {
-      alert('primary objetive completed');
+    var self = this;
+    if(this.primaryObjetive.condition.apply(this) && !this.primaryCompleted) {
+      this.sayStatusWindow('Primary objetive completed')
       this.primaryCompleted = true;
+      setTimeout(function() {
+        self.finishedMissionWindow = Crafty.e('MissionFinishedWindow')
+        self.finishedMissionWindow.initialize({
+          primaryObjetive: self.primaryObjetive.condition.apply(self),
+          secondaryObjetive: self.secondaryObjetive.condition.apply(self),
+          shipDestroyed: false
+        })
+      }, 2000)
     }
-    if(this.secondaryObjetive.condition() && !this.secondaryCompleted) {
-      alert('secondary objetive completed')
+    if(this.secondaryObjetive.condition.apply(this) && !this.secondaryCompleted) {
       this.secondaryCompleted = true;
+    }
+    if(this.playerShip.hullIntegrity <= 0) {
+      this.sayStatusWindow('Your ship has been destroyed')
+      setTimeout(function() {
+        self.finishedMissionWindow = Crafty.e('MissionFinishedWindow')
+        self.finishedMissionWindow.initialize({
+          primaryObjetive: self.primaryObjetive.condition.apply(self),
+          secondaryObjetive: self.secondaryObjetive.condition.apply(self),
+          shipDestroyed: true
+        })
+      }, 2000)
     }
   },
   shipDestroyed: function() {
@@ -73,15 +95,16 @@ window.gatedown.src.MissionControl.prototype = {
       this.ships.push(ship);
     }
   },
+  sayStatusWindow: function(text) {
+    var self = this;
+    if(!self.playerShip.statusWindow) {
+      self.playerShip.statusWindow = Crafty.e('ShipStatusWindow')
+    }
+    self.playerShip.statusWindow.clear();
+    self.playerShip.statusWindow.say(text)
+  },
   createPlayerShip: function() {
     var self = this;
-    var sayStatusWindow = function(text) {
-      if(!self.playerShip.statusWindow) {
-        self.playerShip.statusWindow = Crafty.e('ShipStatusWindow')
-      }
-      self.playerShip.statusWindow.clear();
-      self.playerShip.statusWindow.say(text)
-    }
 
     this.playerShip = Crafty.e('Ship1').at(0,0);
     this.playerShip.faction = 2;
@@ -91,11 +114,11 @@ window.gatedown.src.MissionControl.prototype = {
     this.playerShip.humanPlayer();
     this.playerShip.centerOfAction();
 
-    this.playerShip.bind('leavingActionArea1', function(){sayStatusWindow('Leaving the mission area in 3')});
-    this.playerShip.bind('leavingActionArea2', function(){sayStatusWindow('Leaving the mission area in 2')});
-    this.playerShip.bind('leavingActionArea3', function(){sayStatusWindow('Leaving the mission area in 1')});
-    this.playerShip.bind('jumpingOut', function() {sayStatusWindow('Jumped back to base');});
-    this.playerShip.bind('returnedToActionArea', function(){sayStatusWindow('');});
+    this.playerShip.bind('leavingActionArea1', function(){self.sayStatusWindow('Leaving the mission area in 3')});
+    this.playerShip.bind('leavingActionArea2', function(){self.sayStatusWindow('Leaving the mission area in 2')});
+    this.playerShip.bind('leavingActionArea3', function(){self.sayStatusWindow('Leaving the mission area in 1')});
+    this.playerShip.bind('jumpingOut', function() {self.sayStatusWindow('Jumped back to base');});
+    this.playerShip.bind('returnedToActionArea', function(){self.sayStatusWindow('');});
   },
 
   createPlayerGroup: function(type, pos, number, faction) {
@@ -156,8 +179,8 @@ window.gatedown.src.MissionControl.prototype = {
         enemyForces[i].number,
         enemyForces[i].faction
       );
-      console.log(enemyForces[i].faction);
     }
+    this.texts = type.texts;
     this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
     for(var i = 1, l = alliedForces.length; i < l; i++) {
       this.createGroup('Ship1',
@@ -166,6 +189,32 @@ window.gatedown.src.MissionControl.prototype = {
         alliedForces[i].faction
       );
       console.log(alliedForces[i].faction);
+    }
+
+    this.initializeObjetives(type.objetives[0], type.objetives[1]);
+  },
+  shootDownSatellite: function (level) {
+    var type = this.missionGenerator.types.shootDownSatellite;
+    var enemyForces = type.enemyForces.call(this, level);
+    var alliedForces = type.alliedForces.call(this, level);
+    console.log('aaa')
+    for(var i = 0, l = enemyForces.length; i < l; i++) {
+      this.createGroup('Ship2',
+        enemyForces[i].initPoint,
+        enemyForces[i].number,
+        enemyForces[i].faction
+      );
+    }
+    this.texts = type.texts;
+    console.log(2)
+    this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
+    console.log(3)
+    for(var i = 1, l = alliedForces.length; i < l; i++) {
+      this.createGroup('Ship1',
+        alliedForces[i].initPoint,
+        alliedForces[i].number,
+        alliedForces[i].faction
+      );
     }
 
     this.initializeObjetives(type.objetives[0], type.objetives[1]);

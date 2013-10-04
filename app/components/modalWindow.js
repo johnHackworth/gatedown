@@ -8,8 +8,10 @@ Crafty.c('ModalWindow', {
   },
   initialize: function() {
     this.color(this.backgroundColor);
-    this.width = 600;
-    this.height = 400;
+    var w = gatedown.config.width;
+    var h = gatedown.config.height;
+    this.width = w;
+    this.height = h;
     this.bind('EnterFrame', this.tick.bind(this));
     this.texts = [];
     this.drawnTexts = [];

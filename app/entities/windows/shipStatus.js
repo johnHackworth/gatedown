@@ -17,6 +17,8 @@ Crafty.c('ShipStatusWindow', {
     this.destroy();
   },
   say: function(text) {
-    this.addText(text, 200, 320, '#FF9900', {size: '16px'});
+    var w = gatedown.config.width;
+    var h = gatedown.config.height;
+    this.addText(text, w/2 - 100, h - 80, '#FF9900', {size: '16px'});
   }
 });

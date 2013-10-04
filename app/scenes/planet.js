@@ -23,12 +23,12 @@ Crafty.scene('Planet', (function() {
   }
 
   this.control = window.gatedown.app.director.missionControl;
-  this.control.clearAreaMission(1)
+  this.control.shootDownSatellite(1)
 
   setTimeout(function() {
     self.missionWindow = Crafty.e('missionWindow');
     self.missionWindow.initialize({
-      texts:[],
+      texts:self.control.texts,
       primaryObjetive: self.control.primaryObjetive.text,
       secondaryObjetive: self.control.secondaryObjetive.text
     })

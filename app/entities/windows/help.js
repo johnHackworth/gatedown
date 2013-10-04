@@ -2,6 +2,8 @@ Crafty.c('HelpWindow', {
   pause: true,
   backgroundColor: 'rgba(255,255,255,0.99 )',
   init: function() {
+    var w = gatedown.config.width;
+    var h = gatedown.config.height;
     this.modalW = this.requires('ModalWindow')
     this.addText('HELP', 290, 20, '#880000', {size: '30px'});
     this.addText('Acelerate: Cursor Up', 150, 50);

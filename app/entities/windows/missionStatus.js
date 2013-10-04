@@ -4,10 +4,12 @@ Crafty.c('missionWindow', {
   init: function() {
   },
   initialize: function(options) {
+    var w = gatedown.config.width;
+    var h = gatedown.config.height;
     this.options = options;
     this.modalW = this.requires('ModalWindow')
 
-    this.addText('Mission Briefing', 200, 20, '#880000', {size: '30px'});
+    this.addText('Mission Briefing', w/2 -100, 20, '#880000', {size: '30px'});
     for(var i in this.options.texts) {
       this.addText(this.options.texts[i], 100, 50 + i*15);
     }
