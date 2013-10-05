@@ -15,7 +15,15 @@ Crafty.c('Bullet', {
   },
   velocity: 20,
   maxVelocity: 20,
+  maxLive: 40,
   heading: 0,
+  setSpeed: function(v, mv) {
+    this.velocity = v;
+    this.maxVelocity = mv;
+  },
+  setLive: function(l) {
+    this.maxLive = l;
+  },
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
     this.onHit("Ship", this.shipHit.bind(this));
@@ -42,7 +50,7 @@ Crafty.c('Bullet', {
     }
 
     this.inertia();
-    if(this.counter > 40) {
+    if(this.counter > this.maxLive) {
       this.destroy();
     }
   },
@@ -81,10 +89,7 @@ Crafty.c('BulletLong', {
       .resize(8,2);
     this.initBindings();
     this.counter = 0;
-
-
-  },
-  velocity: 25,
-  maxVelocity: 25
-
+    this.setSpeed(10, 10)
+    this.setLive(60);
+  }
 })

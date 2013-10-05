@@ -1,5 +1,5 @@
 Crafty.c('Hull1', {
-
+  maxVelocity: 6,
   init: function() {
     this.requires('Entity, Color, Solid, Keyboard, Collision')
       .stopOnSolids()
@@ -8,6 +8,9 @@ Crafty.c('Hull1', {
     this.counter = 0;
     this.explosion = Crafty.e('Explosion');
     this.path = [];
+  },
+  setMaxvelocity: function(mv) {
+    this.maxVelocity = mv;
   },
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));

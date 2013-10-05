@@ -197,7 +197,6 @@ window.gatedown.src.MissionControl.prototype = {
     var type = this.missionGenerator.types.shootDownSatellite;
     var enemyForces = type.enemyForces.call(this, level);
     var alliedForces = type.alliedForces.call(this, level);
-    console.log('aaa')
     for(var i = 0, l = enemyForces.length; i < l; i++) {
       this.createGroup('Ship2',
         enemyForces[i].initPoint,
@@ -206,9 +205,7 @@ window.gatedown.src.MissionControl.prototype = {
       );
     }
     this.texts = type.texts;
-    console.log(2)
     this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
-    console.log(3)
     for(var i = 1, l = alliedForces.length; i < l; i++) {
       this.createGroup('Ship1',
         alliedForces[i].initPoint,

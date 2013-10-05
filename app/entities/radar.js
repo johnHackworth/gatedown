@@ -1,7 +1,7 @@
 Crafty.c('Radar', {
-  playerColor: '#FFFFFF',
-  alliedColor: '#00AAAA',
-  enemyColor: '#FF0000',
+  playerColor: 'rgb(255,255,255)',
+  alliedColor: 'rgb(100,255,255)',
+  enemyColor: 'rgb(255,100,100)',
   textToDisplay: 'radar',
   pointSize: 1,
   init: function() {
@@ -53,6 +53,7 @@ Crafty.c('Radar', {
     ctx.fill();
 
     ctx.fillStyle = this.playerColor;
+    ctx.fillRect(25,25,2,2)
     var xPoint, yPoint;
     for(var i = 0, l = this.ships.length; i < l; i++) {
       var distanceX = this.ships[i].x - this.player.x;
@@ -63,11 +64,11 @@ Crafty.c('Radar', {
       distanceY = distanceY < -50 * this.scale? -50 * this.scale: distanceY;
       if(this.ships[i].hullIntegrity > 0) {
         if(this.ships[i].faction === this.player.faction) {
-          ctx.fillSyle = this.alliedColor;
+          ctx.fillStyle = this.alliedColor;
         } else {
           ctx.fillStyle = this.enemyColor;
         }
-        var pointSizeCorrector = this.ships[i].w > 50? 2: 1;
+        var pointSizeCorrector = this.ships[i].w > 30? 2: 1;
         xPoint = this.x + distanceX / this.scale;
         yPoint = this.y + distanceY / this.scale
         ctx.fillRect(xPoint,yPoint,this.pointSize * pointSizeCorrector, this.pointSize * pointSizeCorrector)

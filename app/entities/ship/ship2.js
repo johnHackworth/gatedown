@@ -6,7 +6,7 @@ Crafty.c('Ship2', {
   baseTurningRadius: 4,
   velocity: 0 ,
   hullIntegrity: 3,
-  maxVelocity: 6,
+  maxVelocity: 10,
   heading: 0,
   centered: false,
   outOfControl: 0,
@@ -14,6 +14,8 @@ Crafty.c('Ship2', {
     this.requires('Hull1, Ship, Color, sprShip2')
       .color('transparent')
     this.path = [];
+
+    this.setMaxvelocity(7)
     // this.initComponents();
   },
   shoot: function() {

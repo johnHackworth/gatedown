@@ -28,12 +28,12 @@ Crafty.c('Turret1', {
   },
   shoot: function() {
     this.heading = this.rotation;
-    if(!this.lastShot || this.counter - this.lastShot > 2) {
+    if(!this.lastShot || this.counter - this.lastShot > 20) {
       this.lastShot = this.counter;
       var activateBulletAfter = 15;
       Crafty.e('BulletLong').shoot(this.owner, activateBulletAfter, {
-        x: 15,
-        y: 15,
+        x: this.x - 55,
+        y: this.y, //rotatedPosition([0,110  ])[1],
         rotation: this.rotation,
         heading: this.rotation
       }).color('#66FF66');

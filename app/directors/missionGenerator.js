@@ -123,6 +123,8 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
       5000 - Math.random() * 10000
     ];
     this.objectiveShip = Crafty.e('Station1').at(initPoint[0],initPoint[1])
+
+    this.objectiveShip.faction = 1;
     for(var i =1; i <= 4; i++) {
       var gunner = new window.gatedown.src.gunner();
       // debugger;
