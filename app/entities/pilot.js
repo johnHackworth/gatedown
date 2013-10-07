@@ -133,10 +133,12 @@ window.gatedown.src.pilot.prototype = {
   shipInFront: function() {
     var ships = Crafty('Ship');
     var otherShip = null;
+    var minAngle = 20;
     for(var i = ships.length - 1; i >= 0; i--) {
       otherShip = Crafty(ships[i]);
+      minAngle = 20 + otherShip.w / 10 + otherShip.h / 10
       if(this.ship.distanceTo(otherShip) < this.SHOOTING_DISTANCE &&
-        Math.abs(this.ship.getAngleTo(otherShip) - this.ship.heading) < 20 &&
+        Math.abs(this.ship.getAngleTo(otherShip) - this.ship.heading) < minAngle &&
         this.ship.faction !== otherShip.faction
       ) {
         return true;
