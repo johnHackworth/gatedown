@@ -11,6 +11,9 @@ window.gatedown.config = {
   height: 600,
   fps: 20
 }
+window.gatedown.app.enemy = function(faction) {
+  return faction == 1? 2: 1;
+}
 window.gatedown.src.Director.prototype = {
   backgroundColor: '#CCCCCC',
   start: function() {

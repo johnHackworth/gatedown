@@ -21,6 +21,13 @@ window.gatedown.src.pilot.prototype = {
   formationLoose: false,
   freeActionTime: 0,
   stoppedTime: 0,
+  mission: {
+    type: 'attack',
+    where: {
+      center: {x:0,y:0},
+      radius: 20000
+    }
+  },
   init: function() {
     this.squadron = [];
     this.THINK_TURN = Math.floor(Math.random() * this.THINK_DELTA);
@@ -47,21 +54,38 @@ window.gatedown.src.pilot.prototype = {
     }
   },
   breakFormation: function() {
-    this.sendRadioMessage(this.squadronName + ': dissengage formation');
+    if(!this.formationLoose) {
+      this.sendRadioMessage(this.squadronName + ': dissengage formation');
+    }
     this.formationLoose = true;
   },
   joinFormation: function() {
-    this.sendRadioMessage(this.squadronName + ': engage formation');
+    if(this.formationLoose) {
+      this.sendRadioMessage(this.squadronName + ': engage formation');
+    }
     this.formationLoose = false;
   },
   setAreaOfAction: function(center, radius) {
     this.centerOfAction = center;
     this.radiusOfAction = radius;
   },
+  checkNearBalance: function() {
+    if(!this.squadronLeader && this.ship && this.ship.gridPosition) {
+      var enemyFaction = gatedown.app.enemy(this.ship.faction);
+      var nearEnemies = gatedown.app.grid.faction(this.ship.gridPosition, enemyFaction);
+      var nearFriends = gatedown.app.grid.faction(this.ship.gridPosition, this.ship.faction);
+
+      if(nearEnemies.length > nearFriends.length) {
+        this.breakFormation();
+      } else {
+        this.joinFormation();
+
+      }
+    }
+  },
   chooseTarget: function() {
-
     if(!this.ship) return;
-
+    this.checkNearBalance();
     this.lastTargetCheck = this.counter;
     var ships = Crafty('Ship');
     var nearestShip = null;
@@ -88,20 +112,23 @@ window.gatedown.src.pilot.prototype = {
     if(!(this.counter % this.THINK_DELTA == 0)) {
       return;
     }
-    if(!this.insideAreaOfAction()) {
-      return this.returnToAreaOfAction();
-    }
+
     if(this.squadronLeader) {
       return this.squadronAction();
     } else {
+      if(!this.insideAreaOfAction()) {
+        return this.returnToAreaOfAction();
+      }
       return this.freeAction();
     }
   },
   insideAreaOfAction: function() {
-    return this.ship.distanceTo(this.centerOfAction) < this.radiusOfAction;
+    if(!this.mission) return true;
+    return this.ship.distanceTo(this.mission.where.center) < this.mission.where.radius;
   },
   returnToAreaOfAction: function() {
-    this.ship.intendedDirection = this.ship.getAngleTo(this.centerOfAction);
+    this.ship.intendedDirection = this.ship.getAngleTo(this.mission.where.center);
+    this.accelerate();
   },
   shipInFront: function() {
     var ships = Crafty('Ship');
@@ -191,14 +218,15 @@ window.gatedown.src.pilot.prototype = {
             if((distanceToLeader - correctDistance) < this.MIN_DISTANCE_TO_LEADER) {
               this.ship.deccelerate();
             }
-            if(!this.inPosition && this.shipInFront()) {
-              this.shoot();
-            }
           // }
           this.followSquadron();
         }
 
       }
+    }
+
+    if(this.shipInFront()) {
+      this.shoot();
     }
   },
   canCrash: function() {
@@ -210,6 +238,9 @@ window.gatedown.src.pilot.prototype = {
       if(otherShip  != this.ship) {
         var diff = Math.abs(otherShip.heading - this.ship.heading) % 360;
         var modif = diff > 90? 2: 1;
+        if(otherShip.w > 20) {
+          modif = 3;
+        }
         if(
             (Math.abs(otherShip.x - nextPos[0]) < this.MIN_DISTANCE * modif) &&
             (Math.abs(otherShip.y - nextPos[1]) < this.MIN_DISTANCE * modif) &&

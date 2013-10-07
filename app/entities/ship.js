@@ -39,6 +39,16 @@ Crafty.c('Ship', {
       }
       this.outsideArea = 0;
     }
+    if(this.gridPosition) {
+      var current = gatedown.app.grid.check(this.x, this.y);
+      if(current[0] != this.gridPosition[0] && current[1] != this.gridPosition[1]) {
+        gatedown.app.grid.remove(this.gridPosition,this[0]);
+        this.gridPosition = gatedown.app.grid.add(this.x, this.y, this);
+      }
+    } else {
+      this.gridPosition = gatedown.app.grid.add(this.x, this.y, this);
+    }
+
   },
   jumpOut: function() {
     this.trigger('destroyShip');

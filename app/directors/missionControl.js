@@ -67,29 +67,29 @@ window.gatedown.src.MissionControl.prototype = {
     }
     return remainingShips;
   },
-  createShip: function(type, pos, faction) {
+  createShip: function(type, pos, faction, mission) {
     var ship = Crafty.e(type).at(pos[0], pos[1]);
     ship.faction = faction;
     ship.actionArea = this.options.size;
     ship.bind('destroyShip', this.shipDestroyed.bind(this));
     var pilot = new window.gatedown.src.pilot();
     pilot.assignShip(ship);
-    pilot.setAreaOfAction({x:0, y:0}, 40000);
+    pilot.mission = mission;
 
     this.ships.push(ship);
     this.pilots.push(pilot)
     return ship;
   },
-  createGroup: function(type, pos, number, faction, leaderShip) {
+  createGroup: function(type, pos, number, faction, mission, leaderShip) {
     var sqName = this.squadronNames[faction][Math.floor(Math.random()*this.squadronNames[faction].length)];
     if(!leaderShip) {
-      leaderShip = this.createShip(type, pos, faction);
+      leaderShip = this.createShip(type, pos, faction, mission);
       this.ships.push(leaderShip);
     }
     leaderShip.pilot.name = sqName + ' Leader'
     leaderShip.pilot.squadronName = sqName + ' Squadron'
     for(var i = 1; i < number; i++) {
-      var ship = this.createShip(type, [pos[0], pos[1] + 35*i], faction);
+      var ship = this.createShip(type, [pos[0], pos[1] + 35*i], faction, mission);
       ship.pilot.assignSquadron(leaderShip.pilot);
       ship.pilot.name = sqName + ' ' +i;
       this.ships.push(ship);
@@ -124,7 +124,7 @@ window.gatedown.src.MissionControl.prototype = {
   createPlayerGroup: function(type, pos, number, faction) {
     this.createPlayerShip();
     this.playerShip.at(pos[0], pos[1])
-    this.createGroup(type, pos, number, faction, this.playerShip);
+    this.createGroup(type, pos, number, faction, null, this.playerShip);
 
   },
 
@@ -135,13 +135,13 @@ window.gatedown.src.MissionControl.prototype = {
 
     this.createPlayerShip();
     this.playerShip.at(-3100, -3000)
-    this.createGroup('Ship1', [-3100,-3000], 3, 2, this.playerShip);
+    this.createGroup('Ship1', [-3100,-3000], 3, 2, null, this.playerShip);
     for(friendlySquadronNumber; friendlySquadronNumber; friendlySquadronNumber--) {
-      this.createGroup('Ship1', [-3100 + 100 * friendlySquadronNumber, -3000], 3, 2);
+      this.createGroup('Ship1', [-3100 + 100 * friendlySquadronNumber, -3000], 3, 2, null);
     }
 
     for(foeSquadronNumber; foeSquadronNumber; foeSquadronNumber--) {
-      this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], 3, 1);
+      this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], 3, 1, null);
     }
 
     var station = Crafty.e('Station1').at(-40,-40)
@@ -177,7 +177,8 @@ window.gatedown.src.MissionControl.prototype = {
       this.createGroup('Ship2',
         enemyForces[i].initPoint,
         enemyForces[i].number,
-        enemyForces[i].faction
+        enemyForces[i].faction,
+        enemyForces[i].mission
       );
     }
     this.texts = type.texts;
@@ -186,9 +187,9 @@ window.gatedown.src.MissionControl.prototype = {
       this.createGroup('Ship1',
         alliedForces[i].initPoint,
         alliedForces[i].number,
-        alliedForces[i].faction
+        alliedForces[i].faction,
+        alliedForces[i].mission
       );
-      console.log(alliedForces[i].faction);
     }
 
     this.initializeObjetives(type.objetives[0], type.objetives[1]);
@@ -201,7 +202,8 @@ window.gatedown.src.MissionControl.prototype = {
       this.createGroup('Ship2',
         enemyForces[i].initPoint,
         enemyForces[i].number,
-        enemyForces[i].faction
+        enemyForces[i].faction,
+        enemyForces[i].mission
       );
     }
     this.texts = type.texts;
@@ -210,7 +212,8 @@ window.gatedown.src.MissionControl.prototype = {
       this.createGroup('Ship1',
         alliedForces[i].initPoint,
         alliedForces[i].number,
-        alliedForces[i].faction
+        alliedForces[i].faction,
+        alliedForces[i].mission
       );
     }
 

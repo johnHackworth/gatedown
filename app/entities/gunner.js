@@ -8,7 +8,7 @@ window.gatedown.src.gunner = function() {
 window.gatedown.src.gunner.prototype = {
   SHIP_NEARBY: 1000,
   SHOOTING_DISTANCE: 500,
-  THINK_DELTA: 4,
+  THINK_DELTA: 8,
   hability: 50,
   sight: 50,
   mechanics: 50,

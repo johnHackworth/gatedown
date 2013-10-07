@@ -39,6 +39,8 @@ window.gatedown.src.MissionTypes.clearArea = {
       5000 - Math.random() * 10000,
       5000 - Math.random() * 10000
     ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
     for(var i = scoutSquadrons; i; i--) {
       var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
       forces.push({
@@ -48,7 +50,7 @@ window.gatedown.src.MissionTypes.clearArea = {
         name: 'tralara',
         mission: {
           type: "attack",
-          where: [[-18000,-18000], [18000,18000]]
+          where: { center: initPoint,radius: 8000}
         },
         initPoint: shipInitPoint
       })
@@ -63,6 +65,8 @@ window.gatedown.src.MissionTypes.clearArea = {
       5000 - Math.random() * 10000,
       5000 - Math.random() * 10000
     ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
     for(var i = scoutSquadrons; i; i--) {
       var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
       forces.push({
@@ -71,7 +75,7 @@ window.gatedown.src.MissionTypes.clearArea = {
         number: 3,
         mission: {
           type: "attack",
-          where: [[-18000,-18000], [18000,18000]]
+          where: { center: initPoint,radius: 8000}
         },
         initPoint: shipInitPoint
       })
@@ -122,14 +126,20 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
       5000 - Math.random() * 10000,
       5000 - Math.random() * 10000
     ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
     this.objectiveShip = Crafty.e('Station1').at(initPoint[0],initPoint[1])
 
     this.objectiveShip.faction = 1;
+
     for(var i =1; i <= 4; i++) {
       var gunner = new window.gatedown.src.gunner();
       // debugger;
       gunner.assignTurret(this.objectiveShip['turret'+i])
     }
+    this.ships.push(this.objectiveShip)
     for(var i = scoutSquadrons; i; i--) {
       var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
       forces.push({
@@ -138,8 +148,8 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
         faction: this.enemyFaction,
         name: 'tralara',
         mission: {
-          type: "attack",
-          where: [[initPoint[0]-1000,initPoint[1]-1000], [initPoint[0]+1000,initPoint[1]+1000]]
+          type: "defend",
+          where: { center: initPoint,radius: 1000}
         },
         initPoint: shipInitPoint
       })
@@ -154,6 +164,8 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
       5000 - Math.random() * 10000,
       5000 - Math.random() * 10000
     ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
     for(var i = scoutSquadrons; i; i--) {
       var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
       forces.push({
@@ -162,7 +174,7 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
         number: 3,
         mission: {
           type: "attack",
-          where: [[-18000,-18000], [18000,18000]]
+          where: { center: initPoint,radius: 55000}
         },
         initPoint: shipInitPoint
       })
