@@ -183,6 +183,90 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
   }
 }
 
+window.gatedown.src.MissionTypes.asteroidFieldHunt = {
+  texts: [
+    "A squadron of enemy scouts has infiltrated our territory. They have been hunt by a couple of our frigates,",
+    "but the manage to flee unscatered and hide themselves inside the asteroid belt.",
+    "They know we can't send battleships inside there and we will need to hunt them with fighters",
+    "So fellows... happy hunt"
+  ],
+  asteroids: 200,
+  objetives: [
+  // 0:
+    { "text": "Kill all enemy ships",
+      "condition": function() {
+        var remaining = this.remainingShips()
+        var enemyFaction = this.playerShip.userFaction === 1? 2:1;
+        return remaining[enemyFaction] == 0
+      }
+    },
+
+    { "text": "Keep at least 75% of your ships",
+      "condition": function() {
+        var remaining = this.remainingShips()
+        if(!this.initialShips) {
+          this.initialShips = remaining[this.playerShip.faction]
+        }
+        return remaining[this.playerShip.faction] > 3 * this.initialShips / 4;
+      }
+    }
+  ],
+  enemyForces: function(level) {
+    level = level? level: 1;
+    var scoutSquadrons = 5 * level;
+    var forces = [];
+    var initPoint = [
+      5000 - Math.random() * 10000,
+      5000 - Math.random() * 10000
+    ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
+    for(var i = scoutSquadrons; i; i--) {
+      var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
+      forces.push({
+        type: 2,
+        number: 3,
+        faction: this.enemyFaction,
+        name: 'tralara',
+        mission: {
+          type: "defend",
+          where: { center: initPoint,radius: 7000}
+        },
+        initPoint: shipInitPoint
+      })
+    }
+    return forces;
+  },
+  alliedForces: function(level) {
+    level = level? level: 1;
+    var scoutSquadrons = 3 - level;
+    var forces = [];
+    var initPoint = [
+      5000 - Math.random() * 10000,
+      5000 - Math.random() * 10000
+    ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
+    for(var i = scoutSquadrons; i; i--) {
+      var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
+      forces.push({
+        type: 2,
+        faction: this.userFaction,
+        number: 3,
+        mission: {
+          type: "attack",
+          where: { center: initPoint,radius: 55000}
+        },
+        initPoint: shipInitPoint
+      })
+    }
+    return forces;
+  }
+}
+
+
 
 window.gatedown.src.MissionGenerator = function(options) {
   this.missionControl = options.missionControl;

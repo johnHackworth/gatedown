@@ -27,6 +27,7 @@ Crafty.c('Bullet', {
   initBindings: function() {
     this.bind("EnterFrame", this.tick.bind(this));
     this.onHit("Ship", this.shipHit.bind(this));
+    this.onHit("Asteroid", this.destroy.bind(this));
   },
   shoot: function(owner, activateBulletAfter, origin) {
     if(!origin) {

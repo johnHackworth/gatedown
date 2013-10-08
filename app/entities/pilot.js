@@ -255,6 +255,22 @@ window.gatedown.src.pilot.prototype = {
         }
       }
     }
+    var asteroids = Crafty('Asteroid');
+    var asteroid = null;
+    for(var i = asteroids.length - 1; i >= 0; i--) {
+      asteroid = Crafty(asteroids[i]);
+      if(
+          (Math.abs(asteroid.x - nextPos[0]) < this.MIN_DISTANCE * 3) &&
+          (Math.abs(asteroid.y - nextPos[1]) < this.MIN_DISTANCE * 3) &&
+          (
+            (Math.abs(this.ship.getAngleTo(asteroid) - this.ship.heading) < 90) ||
+            (Math.abs(this.ship.getAngleTo(asteroid) - this.ship.heading) > 250)
+          )
+        ) {
+        return true;
+      }
+    }
+
     return false;
   },
   attack: function(target) {
@@ -297,11 +313,11 @@ window.gatedown.src.pilot.prototype = {
   arrowheadFormation: function() {
     var positions = [
       [0,0],
-      [-30, -30],
-      [-30, 30],
-      [-60, -60],
-      [-60, 0],
-      [-60, 60]
+      [-50, -50],
+      [-50, 50],
+      [-100, -100],
+      [-100, 0],
+      [-100, 100]
     ]
     return positions[this.squadronPosition];
   },

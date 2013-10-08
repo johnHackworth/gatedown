@@ -20,7 +20,7 @@ Crafty.c('Ship2', {
   },
   shoot: function() {
     // console.log(1);
-    if(!this.lastShot || this.counter - this.lastShot > 5) {
+    if(!this.lastShot || this.counter - this.lastShot > 1) {
       this.lastShot = this.counter;
       // console.log(2);
       var activateBulletAfter = 15;

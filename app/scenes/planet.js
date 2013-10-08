@@ -61,7 +61,7 @@ Crafty.scene('Planet', (function() {
   }
 
   this.control = window.gatedown.app.director.missionControl;
-  this.control.shootDownSatellite(1)
+  this.control.asteroidHuntMission(1)
 
   setTimeout(function() {
     self.missionWindow = Crafty.e('missionWindow');

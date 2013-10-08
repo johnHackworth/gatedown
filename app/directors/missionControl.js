@@ -67,6 +67,15 @@ window.gatedown.src.MissionControl.prototype = {
     }
     return remainingShips;
   },
+  createAsteroids: function(n) {
+    this.asteroids = []
+    for(var i = 0; i < n; i++) {
+      var asteroid = Crafty.e('Asteroid');
+      asteroid.at(Math.random() * 10000 - 5000, Math.random() * 10000 - 5000)
+      asteroid.rotation = (Math.random() * 360)
+      this.asteroids.push(asteroid);
+    }
+  },
   createShip: function(type, pos, faction, mission) {
     var ship = Crafty.e(type).at(pos[0], pos[1]);
     ship.faction = faction;
@@ -218,5 +227,32 @@ window.gatedown.src.MissionControl.prototype = {
     }
 
     this.initializeObjetives(type.objetives[0], type.objetives[1]);
-  }
+  },
+  asteroidHuntMission: function (level) {
+    var type = this.missionGenerator.types.asteroidFieldHunt;
+    var enemyForces = type.enemyForces(level);
+    var alliedForces = type.alliedForces(level);
+    console.log(type)
+    this.createAsteroids(type.asteroids);
+    for(var i = 0, l = enemyForces.length; i < l; i++) {
+      this.createGroup('Ship2',
+        enemyForces[i].initPoint,
+        enemyForces[i].number,
+        enemyForces[i].faction,
+        enemyForces[i].mission
+      );
+    }
+    this.texts = type.texts;
+    this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
+    for(var i = 1, l = alliedForces.length; i < l; i++) {
+      this.createGroup('Ship1',
+        alliedForces[i].initPoint,
+        alliedForces[i].number,
+        alliedForces[i].faction,
+        alliedForces[i].mission
+      );
+    }
+
+    this.initializeObjetives(type.objetives[0], type.objetives[1]);
+  },
 }

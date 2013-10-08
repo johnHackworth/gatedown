@@ -51,6 +51,7 @@ Crafty.c('Hull1', {
   },
   stopOnSolids: function() {
     this.onHit('Ship', this.crashOnSolid.bind(this));
+    this.onHit('Asteroid', this.crashOnAsteroid.bind(this));
 
     return this;
   },
@@ -89,6 +90,11 @@ Crafty.c('Hull1', {
       this.x -= this._movement.x;
       this.y -= this._movement.y;
     }
+  },
+  crashOnAsteroid: function(elements) {
+    this.velocity = -0.5;
+    // this.hullIntegrity -= 0.25;
+    this.explosion.sparks(this.rotatedPosition([0,3]));
   },
   crashOnSolid: function(elements) {
     if(this.outOfControl) {
@@ -165,6 +171,7 @@ Crafty.c('Hull1', {
   },
   humanPlayer: function() {
     this.playerControlled = true;
+    window.player = this;
     // this.bind('KeyDown', this.keyMapping.bind(this));
   },
   keyMapping: function(e) {
