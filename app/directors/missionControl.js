@@ -72,7 +72,6 @@ window.gatedown.src.MissionControl.prototype = {
     for(var i = 0; i < n; i++) {
       var asteroid = Crafty.e('Asteroid');
       asteroid.at(Math.random() * 10000 - 5000, Math.random() * 10000 - 5000)
-      asteroid.rotation = (Math.random() * 360)
       this.asteroids.push(asteroid);
     }
   },
