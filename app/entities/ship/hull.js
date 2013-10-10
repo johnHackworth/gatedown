@@ -92,7 +92,18 @@ Crafty.c('Hull1', {
     }
   },
   crashOnAsteroid: function(elements) {
-    this.velocity = -0.5;
+    var angleToAsteroid = this.getAngleTo(elements[0].obj)
+    this.heading = (((this.rotation + angleToAsteroid) % 360) -180) % 360
+    if((this.heading - this.rotation) % 360 > 180) {
+      this.heading += 180;
+      this.velocity = this.velocity /2 * -1;
+    } else {
+      this.velocity = this.velocity /2;
+    }
+    this.rotation = this.heading;
+    this.intendedDirection = this.rotation;
+    this.x = this._x;
+    this.y = this._y;
     // this.hullIntegrity -= 0.25;
     this.explosion.sparks(this.rotatedPosition([0,3]));
   },

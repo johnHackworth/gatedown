@@ -213,11 +213,11 @@ window.gatedown.src.MissionTypes.asteroidFieldHunt = {
   ],
   enemyForces: function(level) {
     level = level? level: 1;
-    var scoutSquadrons = 5 * level;
+    var scoutSquadrons = 4 * level;
     var forces = [];
     var initPoint = [
-      5000 - Math.random() * 10000,
-      5000 - Math.random() * 10000
+      1500 - Math.random() * 3000,
+      1500 - Math.random() * 3000
     ];
     initPoint.x = initPoint[0];
     initPoint.y = initPoint[1];
@@ -232,7 +232,7 @@ window.gatedown.src.MissionTypes.asteroidFieldHunt = {
         name: 'tralara',
         mission: {
           type: "defend",
-          where: { center: initPoint,radius: 7000}
+          where: { center: [0,0], radius: 3000}
         },
         initPoint: shipInitPoint
       })

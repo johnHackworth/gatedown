@@ -14,6 +14,18 @@ window.gatedown.config = {
 window.gatedown.app.enemy = function(faction) {
   return faction == 1? 2: 1;
 }
+window.gatedown.app.angles = function(ang1, ang2) {
+  if(ang1 === ang2) {
+    return 0;
+  }
+  if(
+    ((ang1 - ang2) + 360) % 360 > 180
+  ) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
 window.gatedown.src.Director.prototype = {
   backgroundColor: '#CCCCCC',
   start: function() {

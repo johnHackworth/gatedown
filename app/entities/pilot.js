@@ -148,13 +148,20 @@ window.gatedown.src.pilot.prototype = {
   },
   freeAction: function() {
     if(Math.random() * 100 < this.hability && Math.random() > 0.7) {
+      var crashingInto = this.canCrash();
+      if(crashingInto) {
+        if(this.ship.centered) {
+          // debugger;
+        }
 
-      if(this.canCrash()) {
+        var crashAngle = this.ship.getAngleTo(crashingInto);
+        var crashOrientation = gatedown.app.angles(this.ship.orientation, crashAngle);
+
         if(this.ship.velocity <= 1) {
-          this.ship.intendedDirection = this.ship.heading + 90 % 360;
+          this.ship.intendedDirection = this.ship.getAngleTo(crashingInto) + crashOrientation * 90 % 360;
           this.accelerate();
         } else {
-          this.ship.intendedDirection = this.ship.heading + 90 % 360;
+          this.ship.intendedDirection = this.ship.getAngleTo(crashingInto) + crashOrientation * 90 % 360;
           this.ship.deccelerate();
         }
       } else {
@@ -235,6 +242,23 @@ window.gatedown.src.pilot.prototype = {
     var nextPos = this.ship.getNewPosition();
     var ships = Crafty('Ship');
     var otherShip = null;
+
+    var asteroids = Crafty('Asteroid');
+    var asteroid = null;
+    for(var i = asteroids.length - 1; i >= 0; i--) {
+      asteroid = Crafty(asteroids[i]);
+      if(
+          (Math.abs(asteroid.x - nextPos[0]) < this.MIN_DISTANCE * 2) &&
+          (Math.abs(asteroid.y - nextPos[1]) < this.MIN_DISTANCE * 2) &&
+          (
+            (Math.abs(this.ship.getAngleTo(asteroid) - this.ship.heading) < 90) ||
+            (Math.abs(this.ship.getAngleTo(asteroid) - this.ship.heading) > 250)
+          )
+        ) {
+        return asteroid;
+      }
+    }
+
     for(var i = ships.length - 1; i >= 0; i--) {
       otherShip = Crafty(ships[i]);
       if(otherShip  != this.ship) {
@@ -251,23 +275,8 @@ window.gatedown.src.pilot.prototype = {
               (Math.abs(this.ship.getAngleTo(otherShip) - this.ship.heading) > 300)
             )
           ) {
-          return true;
+          return otherShip;
         }
-      }
-    }
-    var asteroids = Crafty('Asteroid');
-    var asteroid = null;
-    for(var i = asteroids.length - 1; i >= 0; i--) {
-      asteroid = Crafty(asteroids[i]);
-      if(
-          (Math.abs(asteroid.x - nextPos[0]) < this.MIN_DISTANCE * 3) &&
-          (Math.abs(asteroid.y - nextPos[1]) < this.MIN_DISTANCE * 3) &&
-          (
-            (Math.abs(this.ship.getAngleTo(asteroid) - this.ship.heading) < 90) ||
-            (Math.abs(this.ship.getAngleTo(asteroid) - this.ship.heading) > 250)
-          )
-        ) {
-        return true;
       }
     }
 

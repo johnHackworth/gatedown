@@ -69,9 +69,19 @@ window.gatedown.src.MissionControl.prototype = {
   },
   createAsteroids: function(n) {
     this.asteroids = []
+    if(!this.asteroidFieldLimits) {
+      this.asteroidFieldLimits = [[-2500, -2500], [2500,2500]];
+    }
+    var radius = [
+      this.asteroidFieldLimits[1][0] - this.asteroidFieldLimits[0][0],
+      this.asteroidFieldLimits[1][1] - this.asteroidFieldLimits[0][1]
+    ]
     for(var i = 0; i < n; i++) {
       var asteroid = Crafty.e('Asteroid');
-      asteroid.at(Math.random() * 10000 - 5000, Math.random() * 10000 - 5000)
+      var x = this.asteroidFieldLimits[0][0] + Math.random() * radius[0];
+      var y = this.asteroidFieldLimits[0][1] + Math.random() * radius[1];
+      // console.log(x,y);
+      asteroid.at(x,y)
       this.asteroids.push(asteroid);
     }
   },
