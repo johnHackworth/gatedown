@@ -48,10 +48,24 @@ Crafty.scene('Planet', (function() {
     return factionShips;
   }
 
+
+  Crafty.background('#000000')
+
+  var imageBackgrounds = [
+    // "http://fc02.deviantart.net/fs70/i/2012/064/1/9/starfield_01_by_glenroberson-d4rnzuv.jpg",
+    "http://th01.deviantart.net/fs71/PRE/i/2011/017/6/f/starfield_stock_by_freelancah-d2k5mcu.jpg",
+    // "http://fc09.deviantart.net/fs37/f/2008/252/9/c/Star_Field_3_by_RoterHesse.jpg",
+    "http://fc09.deviantart.net/fs70/i/2010/282/5/d/blue_starfield_stock_by_arisechicken117-d30d8f8.png",
+    "http://th08.deviantart.net/fs71/PRE/i/2011/012/e/7/starfield_stock_by_bloknayrb-d370gmt.jpg",
+    "http://th06.deviantart.net/fs70/PRE/f/2012/097/f/a/dense_star_field_stock_by_arisechicken117-d4vc4d3.png",
+    // "http://fc09.deviantart.net/fs71/i/2013/049/8/5/starfield_attempt_by_denece_the_sylcoe-d5vdv9z.jpg"
+  ]
+
   this.bg = Crafty.e("2D, Canvas, Image")
              .attr({x:0-this.TOTAL_WIDTH / 2, y: 0-this.TOTAL_HEIGHT/2, w: this.TOTAL_WIDTH, h:this.TOTAL_HEIGHT})
-             // .image("http://fc09.deviantart.net/fs71/i/2011/078/a/a/simplistic_space_background_by_swordkirby9999-d3c04tz.jpg", "repeat");
-             .image("http://localhost:8000/assets/stars.jpg", "repeat")
+              .image(imageBackgrounds[Math.floor(Math.random() * imageBackgrounds.length)],
+              "repeat");
+             // .image("http://localhost:8000/assets/stars.png", "repeat")
   this.showHelpWindow = function() {
     if(self.helpWindow) {
       self.helpWindow.destroy();
@@ -61,7 +75,7 @@ Crafty.scene('Planet', (function() {
   }
 
   this.control = window.gatedown.app.director.missionControl;
-  this.control.asteroidHuntMission(1)
+  this.control[window.gatedown.app.director.nextMission()](1)
 
   setTimeout(function() {
     self.missionWindow = Crafty.e('missionWindow');

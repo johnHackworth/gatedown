@@ -1,4 +1,4 @@
-Crafty.sprite('assets/station1.png', {sprStation: [0,0,150,146]})
+Crafty.sprite('assets/station1.png', {sprStation: [0,0,120,118]})
 
 
 Crafty.c('Station1', {

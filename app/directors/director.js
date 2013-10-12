@@ -34,6 +34,13 @@ window.gatedown.src.Director.prototype = {
     Crafty.background(this.backgroundColor);
     this.missionControl = new window.gatedown.src.MissionControl();
     Crafty.scene('Planet')
-
+  },
+  missionNames: [
+    'shootDownSatellite',
+    'asteroidHuntMission',
+    'clearAreaMission'
+  ],
+  nextMission: function() {
+    return this.missionNames[Math.floor(Math.random() * this.missionNames.length)]
   }
 }
