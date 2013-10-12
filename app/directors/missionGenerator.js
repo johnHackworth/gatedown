@@ -120,7 +120,7 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
   ],
   enemyForces: function(level) {
     level = level? level: 1;
-    var scoutSquadrons = 2 * level;
+    var scoutSquadrons = 4;
     var forces = [];
     var initPoint = [
       5000 - Math.random() * 10000,
@@ -141,7 +141,7 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
     }
     this.ships.push(this.objectiveShip)
     for(var i = scoutSquadrons; i; i--) {
-      var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
+      var shipInitPoint = [initPoint[0] + 200 + i * 100, initPoint[1] + 200];
       forces.push({
         type: 2,
         number: 3,
