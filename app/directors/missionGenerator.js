@@ -70,7 +70,7 @@ window.gatedown.src.MissionTypes.clearArea = {
     for(var i = scoutSquadrons; i; i--) {
       var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
       forces.push({
-        type: 2,
+        type: 1,
         faction: this.userFaction,
         number: 3,
         mission: {
@@ -120,7 +120,8 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
   ],
   enemyForces: function(level) {
     level = level? level: 1;
-    var scoutSquadrons = 4;
+    var scoutSquadrons = 3;
+    var fighterSquadrons = 2;
     var forces = [];
     var initPoint = [
       5000 - Math.random() * 10000,
@@ -154,6 +155,20 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
         initPoint: shipInitPoint
       })
     }
+    for(var i = fighterSquadrons; i; i--) {
+      var shipInitPoint = [initPoint[0] + 200 + i * 100, initPoint[1] + 500];
+      forces.push({
+        type: 3,
+        number: 2,
+        faction: this.enemyFaction,
+        name: 'tralara',
+        mission: {
+          type: "defend",
+          where: { center: initPoint,radius: 1000}
+        },
+        initPoint: shipInitPoint
+      })
+    }
     return forces;
   },
   alliedForces: function(level) {
@@ -169,7 +184,7 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
     for(var i = scoutSquadrons; i; i--) {
       var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
       forces.push({
-        type: 2,
+        type: 1,
         faction: this.userFaction,
         number: 3,
         mission: {
@@ -252,7 +267,7 @@ window.gatedown.src.MissionTypes.asteroidFieldHunt = {
     for(var i = scoutSquadrons; i; i--) {
       var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
       forces.push({
-        type: 2,
+        type: 1,
         faction: this.userFaction,
         number: 3,
         mission: {

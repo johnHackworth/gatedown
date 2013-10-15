@@ -1,4 +1,4 @@
-Crafty.sprite('assets/little_ship1.png', {sprShip: [0,0,10,9]})
+Crafty.sprite('assets/fighter1.png', {sprShip: [0,0,200,124]})
 
 
 Crafty.c('Ship1', {
@@ -15,7 +15,7 @@ Crafty.c('Ship1', {
     this.requires('Ship, Color, sprShip')
       .color('transparent')
     this.hull = this.requires('Hull1');
-    this.hull.resize(10,9)
+    this.hull.resize(14,9)
     this.initBindings();
     this.counter = 0;
     this.initComponents();
@@ -29,8 +29,8 @@ Crafty.c('Ship1', {
   initComponents: function() {
     this.components = {};
     this.initComponent('Engine', [-5, 2]);
-    this.initComponent('LeftWing1', [0, -3]);
-    this.initComponent('RightWing1', [0, 7 ]);
+    this.initComponent('LeftWing1', [1, -4]);
+    this.initComponent('RightWing1', [1, 9]);
   },
   shoot: function() {
     this.components['rightwing1'].shoot();

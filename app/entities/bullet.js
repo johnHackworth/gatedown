@@ -1,3 +1,4 @@
+Crafty.audio.add("bang", "assets/laser1.mp3");
 Crafty.c('Bullet', {
   tileWidth: 3,
   tileHeight: 1,
@@ -33,6 +34,7 @@ Crafty.c('Bullet', {
     if(!origin) {
       origin = owner;
     }
+    Crafty.audio.play("bang")
     this.attr({
       heading: origin.heading,
       x: origin.x,

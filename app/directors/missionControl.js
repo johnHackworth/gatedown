@@ -2,6 +2,11 @@ window.gatedown = window.gatedown || {};
 window.gatedown.src = window.gatedown.src || {};
 window.gatedown.app = window.gatedown.app || {};
 
+var shipType = {
+  "1": "Ship1",
+  "2": "Ship2",
+  "3": "Fighter2"
+}
 
 window.gatedown.src.MissionControl = function() {
   this.missionGenerator = new window.gatedown.src.MissionGenerator(this);
@@ -146,53 +151,12 @@ window.gatedown.src.MissionControl.prototype = {
 
   },
 
-  randomEncounter: function(options) {
-    this.options = options;
-    var friendlySquadronNumber = Math.ceil(Math.random() * 2);
-    var foeSquadronNumber = Math.ceil(Math.random() * 3);
-
-    this.createPlayerShip();
-    this.playerShip.at(-3100, -3000)
-    this.createGroup('Ship1', [-3100,-3000], 3, 2, null, this.playerShip);
-    for(friendlySquadronNumber; friendlySquadronNumber; friendlySquadronNumber--) {
-      this.createGroup('Ship1', [-3100 + 100 * friendlySquadronNumber, -3000], 3, 2, null);
-    }
-
-    for(foeSquadronNumber; foeSquadronNumber; foeSquadronNumber--) {
-      this.createGroup('Ship2', [Math.floor(Math.random() * 6000),Math.floor(Math.random() * 6000)], 3, 1, null);
-    }
-
-    var station = Crafty.e('Station1').at(-40,-40)
-    station.faction = 1;
-    for(var i =1; i <= 4; i++) {
-      var gunner = new window.gatedown.src.gunner();
-      // debugger;
-      gunner.assignTurret(station['turret'+i])
-    }
-    // station.pilot.name = 'Station leader';
-    this.ships.push(station);
-  },
-  stationAttackTest: function() {
-
-    this.createPlayerShip();
-    this.playerShip.at(-200, -0)
-
-    // var station = this.createShip('Station1', [0,0], 2);
-    // station.pilot.name = 'Station leader';
-
-    var station = Crafty.e('Station1').at(-40,-40)
-    for(var i =1; i <= 4; i++) {
-      var gunner = new window.gatedown.src.gunner();
-      // debugger;
-      gunner.assignTurret(station['turret'+i])
-    }
-  },
   clearAreaMission: function (level) {
     var type = this.missionGenerator.types.clearArea;
     var enemyForces = type.enemyForces(level);
     var alliedForces = type.alliedForces(level);
     for(var i = 0, l = enemyForces.length; i < l; i++) {
-      this.createGroup('Ship2',
+      this.createGroup(shipType[enemyForces[i].type],
         enemyForces[i].initPoint,
         enemyForces[i].number,
         enemyForces[i].faction,
@@ -202,7 +166,7 @@ window.gatedown.src.MissionControl.prototype = {
     this.texts = type.texts;
     this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
     for(var i = 1, l = alliedForces.length; i < l; i++) {
-      this.createGroup('Ship1',
+      this.createGroup(shipType[alliedForces[i].type],
         alliedForces[i].initPoint,
         alliedForces[i].number,
         alliedForces[i].faction,
@@ -217,7 +181,7 @@ window.gatedown.src.MissionControl.prototype = {
     var enemyForces = type.enemyForces.call(this, level);
     var alliedForces = type.alliedForces.call(this, level);
     for(var i = 0, l = enemyForces.length; i < l; i++) {
-      this.createGroup('Ship2',
+      this.createGroup(shipType[enemyForces[i].type],
         enemyForces[i].initPoint,
         enemyForces[i].number,
         enemyForces[i].faction,
@@ -227,7 +191,7 @@ window.gatedown.src.MissionControl.prototype = {
     this.texts = type.texts;
     this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
     for(var i = 1, l = alliedForces.length; i < l; i++) {
-      this.createGroup('Ship1',
+      this.createGroup(shipType[alliedForces[i].type],
         alliedForces[i].initPoint,
         alliedForces[i].number,
         alliedForces[i].faction,
@@ -244,7 +208,7 @@ window.gatedown.src.MissionControl.prototype = {
     console.log(type)
     this.createAsteroids(type.asteroids);
     for(var i = 0, l = enemyForces.length; i < l; i++) {
-      this.createGroup('Ship2',
+      this.createGroup(shipType[enemyForces[i].type],
         enemyForces[i].initPoint,
         enemyForces[i].number,
         enemyForces[i].faction,
@@ -254,7 +218,7 @@ window.gatedown.src.MissionControl.prototype = {
     this.texts = type.texts;
     this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
     for(var i = 1, l = alliedForces.length; i < l; i++) {
-      this.createGroup('Ship1',
+      this.createGroup(shipType[alliedForces[i].type],
         alliedForces[i].initPoint,
         alliedForces[i].number,
         alliedForces[i].faction,
