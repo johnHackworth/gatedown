@@ -142,6 +142,8 @@ window.gatedown.src.MissionControl.prototype = {
     this.playerShip.bind('leavingActionArea3', function(){self.sayStatusWindow('Leaving the mission area in 1')});
     this.playerShip.bind('jumpingOut', function() {self.sayStatusWindow('Jumped back to base');});
     this.playerShip.bind('returnedToActionArea', function(){self.sayStatusWindow('');});
+
+
   },
 
   createPlayerGroup: function(type, pos, number, faction) {
@@ -201,11 +203,36 @@ window.gatedown.src.MissionControl.prototype = {
 
     this.initializeObjetives(type.objetives[0], type.objetives[1]);
   },
+  scortFreighterMission: function(level) {
+    var type = this.missionGenerator.types.scortFreighter;
+    var enemyForces = type.enemyForces.call(this, level);
+    var alliedForces = type.alliedForces.call(this, level);
+    for(var i = 0, l = enemyForces.length; i < l; i++) {
+      this.createGroup(shipType[enemyForces[i].type],
+        enemyForces[i].initPoint,
+        enemyForces[i].number,
+        enemyForces[i].faction,
+        enemyForces[i].mission
+      );
+    }
+    this.texts = type.texts;
+    this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
+    for(var i = 1, l = alliedForces.length; i < l; i++) {
+      this.createGroup(shipType[alliedForces[i].type],
+        alliedForces[i].initPoint,
+        alliedForces[i].number,
+        alliedForces[i].faction,
+        alliedForces[i].mission
+      );
+    }
+
+    this.initializeObjetives(type.objetives[0], type.objetives[1]);
+
+  },
   asteroidHuntMission: function (level) {
     var type = this.missionGenerator.types.asteroidFieldHunt;
     var enemyForces = type.enemyForces(level);
     var alliedForces = type.alliedForces(level);
-    console.log(type)
     this.createAsteroids(type.asteroids);
     for(var i = 0, l = enemyForces.length; i < l; i++) {
       this.createGroup(shipType[enemyForces[i].type],

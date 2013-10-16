@@ -282,6 +282,118 @@ window.gatedown.src.MissionTypes.asteroidFieldHunt = {
 }
 
 
+window.gatedown.src.MissionTypes.scortFreighter = {
+  texts: [
+    "One of our freighters is arriving to the system. There has been reports of enemy scouts in the zone, ",
+    "So your squadron is going to be scrambled to keep them safe.",
+    "Protect them"  ],
+  objetives: [
+  // 0:
+    { "text": "Keep the freighter alive until it reach the planet base",
+      "condition": function() {
+        return this.objectiveShip.hullIntegrity > 0 && this.counter > 4000
+      }
+    },
+  // 1:
+    { "text": "Kill all enemy ships",
+      "condition": function() {
+        var remaining = this.remainingShips()
+        var enemyFaction = this.playerShip.userFaction === 1? 2:1;
+        return remaining[enemyFaction] == 0
+      }
+    },
+
+    { "text": "Keep at least 75% of your ships",
+      "condition": function() {
+        var remaining = this.remainingShips()
+        if(!this.initialShips) {
+          this.initialShips = remaining[this.playerShip.faction]
+        }
+        return remaining[this.playerShip.faction] > 3 * this.initialShips / 4;
+      }
+    }
+  ],
+  enemyForces: function(level) {
+    level = level? level: 1;
+    var scoutSquadrons = 3;
+    var fighterSquadrons = 2;
+    var forces = [];
+    var initPoint = [
+      5000 - Math.random() * 10000,
+      5000 - Math.random() * 10000
+    ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
+
+    for(var i = scoutSquadrons; i; i--) {
+      var shipInitPoint = [initPoint[0] + 200 + i * 100, initPoint[1] + 200];
+      forces.push({
+        type: 2,
+        number: 3,
+        faction: this.enemyFaction,
+        name: 'tralara',
+        mission: {
+          type: "attack",
+          where: { center: initPoint,radius: 55000}
+        },
+        initPoint: shipInitPoint
+      })
+    }
+    for(var i = fighterSquadrons; i; i--) {
+      var shipInitPoint = [initPoint[0] + 200 + i * 100, initPoint[1] + 500];
+      forces.push({
+        type: 3,
+        number: 2,
+        faction: this.enemyFaction,
+        name: 'tralara',
+        mission: {
+          type: "attack",
+          where: { center: initPoint,radius: 55000}
+        },
+        initPoint: shipInitPoint
+      })
+    }
+    return forces;
+  },
+  alliedForces: function(level) {
+    level = level? level: 1;
+    var scoutSquadrons = 3 - level;
+    var forces = [];
+    var initPoint = [
+      5000 - Math.random() * 10000,
+      5000 - Math.random() * 10000
+    ];
+    initPoint.x = initPoint[0];
+    initPoint.y = initPoint[1];
+
+    this.objectiveShip = Crafty.e('Freighter1').at(initPoint[0] - 200,initPoint[1])
+    this.objectiveShip.faction = 2;
+    var pilot = new window.gatedown.src.pilot();
+    pilot.assignShip(this.objectiveShip);
+    this.ships.push(this.objectiveShip)
+
+
+    for(var i = scoutSquadrons; i; i--) {
+      var shipInitPoint = [initPoint[0] + i * 100, initPoint[1]];
+      forces.push({
+        type: 1,
+        faction: this.userFaction,
+        number: 3,
+        mission: {
+          type: "defend",
+          where: { center: initPoint,radius: 55000}
+        },
+        initPoint: shipInitPoint
+      })
+    }
+    return forces;
+  }
+}
+
+
+
 
 window.gatedown.src.MissionGenerator = function(options) {
   this.missionControl = options.missionControl;

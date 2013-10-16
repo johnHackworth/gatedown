@@ -38,7 +38,8 @@ window.gatedown.src.Director.prototype = {
   missionNames: [
     'shootDownSatellite',
     'asteroidHuntMission',
-    'clearAreaMission'
+    'clearAreaMission',
+    'scortFreighterMission'
   ],
   nextMission: function() {
     return this.missionNames[Math.floor(Math.random() * this.missionNames.length)]
