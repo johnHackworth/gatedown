@@ -42,6 +42,9 @@ window.gatedown.src.Director.prototype = {
     'scortFreighterMission'
   ],
   nextMission: function() {
+    if(window.location.hash.split('#mission').length > 0) {
+      return this.missionNames[window.location.hash.split('#mission:')[1]]
+    }
     return this.missionNames[Math.floor(Math.random() * this.missionNames.length)]
   }
 }

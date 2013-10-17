@@ -319,8 +319,8 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     var fighterSquadrons = 2;
     var forces = [];
     var initPoint = [
-      5000 - Math.random() * 10000,
-      5000 - Math.random() * 10000
+      0 - Math.random() * 10000,
+      0 - Math.random() * 10000
     ];
     initPoint.x = initPoint[0];
     initPoint.y = initPoint[1];
@@ -358,12 +358,13 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     return forces;
   },
   alliedForces: function(level) {
+    this.planetPos = [Math.random() * 10000 + 5000, Math.random()*5000]
     level = level? level: 1;
     var scoutSquadrons = 3 - level;
     var forces = [];
     var initPoint = [
-      5000 - Math.random() * 10000,
-      5000 - Math.random() * 10000
+     0 - Math.random() * 10000,
+     0 - Math.random() * 10000
     ];
     initPoint.x = initPoint[0];
     initPoint.y = initPoint[1];
@@ -371,6 +372,10 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     this.objectiveShip = Crafty.e('Freighter1').at(initPoint[0] - 200,initPoint[1])
     this.objectiveShip.faction = 2;
     var pilot = new window.gatedown.src.pilot();
+    pilot.mission = {
+          type: "goTo",
+          where: { center: [this.planetPos[0], this.planetPos[1]],radius: 500}
+        },
     pilot.assignShip(this.objectiveShip);
     this.ships.push(this.objectiveShip)
 
@@ -383,7 +388,7 @@ window.gatedown.src.MissionTypes.scortFreighter = {
         number: 3,
         mission: {
           type: "defend",
-          where: { center: initPoint,radius: 55000}
+          where: { ship: this.objectiveShip, radius: 1000}
         },
         initPoint: shipInitPoint
       })

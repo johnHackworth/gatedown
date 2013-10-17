@@ -98,7 +98,7 @@ window.gatedown.src.MissionControl.prototype = {
     var pilot = new window.gatedown.src.pilot();
     pilot.assignShip(ship);
     pilot.mission = mission;
-
+    console.log(mission);
     this.ships.push(ship);
     this.pilots.push(pilot)
     return ship;
@@ -153,10 +153,11 @@ window.gatedown.src.MissionControl.prototype = {
 
   },
 
-  clearAreaMission: function (level) {
-    var type = this.missionGenerator.types.clearArea;
-    var enemyForces = type.enemyForces(level);
-    var alliedForces = type.alliedForces(level);
+  createMission: function(level, missionType) {
+    var type = this.missionGenerator.types[missionType];
+    console.log(missionType);
+    var enemyForces = type.enemyForces.call(this, level);
+    var alliedForces = type.alliedForces.call(this, level);
     for(var i = 0, l = enemyForces.length; i < l; i++) {
       this.createGroup(shipType[enemyForces[i].type],
         enemyForces[i].initPoint,
@@ -175,84 +176,28 @@ window.gatedown.src.MissionControl.prototype = {
         alliedForces[i].mission
       );
     }
+    if(this.planetPos) {
+      this.planet = Crafty.e('Planet').at(this.planetPos[0], this.planetPos[1]);
+      this.planet.faction = -1;
+      this.ships.push(this.planet);
+    }
+    if(type.asteroids) {
+      this.createAsteroids(type.asteroids);
+    }
 
     this.initializeObjetives(type.objetives[0], type.objetives[1]);
+
+  },
+  clearAreaMission: function (level) {
+    return this.createMission(level, 'clearArea');
   },
   shootDownSatellite: function (level) {
-    var type = this.missionGenerator.types.shootDownSatellite;
-    var enemyForces = type.enemyForces.call(this, level);
-    var alliedForces = type.alliedForces.call(this, level);
-    for(var i = 0, l = enemyForces.length; i < l; i++) {
-      this.createGroup(shipType[enemyForces[i].type],
-        enemyForces[i].initPoint,
-        enemyForces[i].number,
-        enemyForces[i].faction,
-        enemyForces[i].mission
-      );
-    }
-    this.texts = type.texts;
-    this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
-    for(var i = 1, l = alliedForces.length; i < l; i++) {
-      this.createGroup(shipType[alliedForces[i].type],
-        alliedForces[i].initPoint,
-        alliedForces[i].number,
-        alliedForces[i].faction,
-        alliedForces[i].mission
-      );
-    }
-
-    this.initializeObjetives(type.objetives[0], type.objetives[1]);
+    return this.createMission(level, 'showDownSatellite');
   },
   scortFreighterMission: function(level) {
-    var type = this.missionGenerator.types.scortFreighter;
-    var enemyForces = type.enemyForces.call(this, level);
-    var alliedForces = type.alliedForces.call(this, level);
-    for(var i = 0, l = enemyForces.length; i < l; i++) {
-      this.createGroup(shipType[enemyForces[i].type],
-        enemyForces[i].initPoint,
-        enemyForces[i].number,
-        enemyForces[i].faction,
-        enemyForces[i].mission
-      );
-    }
-    this.texts = type.texts;
-    this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
-    for(var i = 1, l = alliedForces.length; i < l; i++) {
-      this.createGroup(shipType[alliedForces[i].type],
-        alliedForces[i].initPoint,
-        alliedForces[i].number,
-        alliedForces[i].faction,
-        alliedForces[i].mission
-      );
-    }
-
-    this.initializeObjetives(type.objetives[0], type.objetives[1]);
-
+    return this.createMission(level, 'scortFreighter')
   },
   asteroidHuntMission: function (level) {
-    var type = this.missionGenerator.types.asteroidFieldHunt;
-    var enemyForces = type.enemyForces(level);
-    var alliedForces = type.alliedForces(level);
-    this.createAsteroids(type.asteroids);
-    for(var i = 0, l = enemyForces.length; i < l; i++) {
-      this.createGroup(shipType[enemyForces[i].type],
-        enemyForces[i].initPoint,
-        enemyForces[i].number,
-        enemyForces[i].faction,
-        enemyForces[i].mission
-      );
-    }
-    this.texts = type.texts;
-    this.createPlayerGroup('Ship1', alliedForces[0].initPoint, alliedForces[0].number, alliedForces[0].faction);
-    for(var i = 1, l = alliedForces.length; i < l; i++) {
-      this.createGroup(shipType[alliedForces[i].type],
-        alliedForces[i].initPoint,
-        alliedForces[i].number,
-        alliedForces[i].faction,
-        alliedForces[i].mission
-      );
-    }
-
-    this.initializeObjetives(type.objetives[0], type.objetives[1]);
+    return this.createMission(level, 'asteroidFieldHunt')
   },
 }
