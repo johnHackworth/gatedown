@@ -65,6 +65,7 @@ Crafty.scene('Planet', (function() {
              .attr({x:0-this.TOTAL_WIDTH / 2, y: 0-this.TOTAL_HEIGHT/2, w: this.TOTAL_WIDTH, h:this.TOTAL_HEIGHT})
               .image(imageBackgrounds[Math.floor(Math.random() * imageBackgrounds.length)],
               "repeat");
+  this.bg.z = -1000;
   this.showHelpWindow = function() {
     if(self.helpWindow) {
       self.helpWindow.destroy();

@@ -63,12 +63,17 @@ Crafty.c('Radar', {
       distanceY = distanceY > 50 * this.scale? 50 * this.scale: distanceY;
       distanceY = distanceY < -50 * this.scale? -50 * this.scale: distanceY;
       if(this.ships[i].hullIntegrity > 0) {
-        if(this.ships[i].faction === this.player.faction) {
+        var pointSizeCorrector = this.ships[i].w > 30? 2: 1;
+        if(this.ships[i].faction === -1) {
+          // planet
+          ctx.fillStyle = '#CCAA33';
+          pointSizeCorrector = 4;
+          console.log('aaa');
+        } else if(this.ships[i].faction === this.player.faction) {
           ctx.fillStyle = this.alliedColor;
         } else {
           ctx.fillStyle = this.enemyColor;
         }
-        var pointSizeCorrector = this.ships[i].w > 30? 2: 1;
         xPoint = this.x + distanceX / this.scale;
         yPoint = this.y + distanceY / this.scale
         ctx.fillRect(xPoint,yPoint,this.pointSize * pointSizeCorrector, this.pointSize * pointSizeCorrector)

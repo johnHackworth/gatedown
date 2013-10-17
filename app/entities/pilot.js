@@ -124,10 +124,18 @@ window.gatedown.src.pilot.prototype = {
   },
   insideAreaOfAction: function() {
     if(!this.mission) return true;
-    return this.ship.distanceTo(this.mission.where.center) < this.mission.where.radius;
+    if(this.mission.where.center) {
+      return this.ship.distanceTo(this.mission.where.center) < this.mission.where.radius;
+    } else if(this.mission.where.ship) {
+      return this.ship.distanceTo(this.mission.where.ship) < this.mission.where.radius;
+    }
   },
   returnToAreaOfAction: function() {
-    this.ship.intendedDirection = this.ship.getAngleTo(this.mission.where.center);
+    var destination = this.mission.where.center;
+    if(this.mission.where.ship) {
+      destination = this.mission.where.ship;
+    }
+    this.ship.intendedDirection = this.ship.getAngleTo(destination);
     this.accelerate();
   },
   shipInFront: function() {
