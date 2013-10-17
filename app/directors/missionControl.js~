@@ -179,6 +179,8 @@ window.gatedown.src.MissionControl.prototype = {
     if(this.planetPos) {
       this.planet = Crafty.e('Planet').at(this.planetPos[0], this.planetPos[1]);
       this.ships.push(this.planet);
+console.log('---');
+console.log(this.ships[this.ships.length -1])
     }
     if(type.asteroids) {
       this.createAsteroids(type.asteroids);
