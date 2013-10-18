@@ -191,7 +191,7 @@ window.gatedown.src.MissionControl.prototype = {
     return this.createMission(level, 'clearArea');
   },
   shootDownSatellite: function (level) {
-    return this.createMission(level, 'showDownSatellite');
+    return this.createMission(level, 'shootDownSatellite');
   },
   scortFreighterMission: function(level) {
     return this.createMission(level, 'scortFreighter')
