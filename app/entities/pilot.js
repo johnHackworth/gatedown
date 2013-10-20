@@ -135,7 +135,6 @@ window.gatedown.src.pilot.prototype = {
     if(this.mission.where.ship) {
       destination = this.mission.where.ship;
     }
-	if(isNaN(this.ship.getAngleTo(destination))) debugger;
     this.ship.intendedDirection = this.ship.getAngleTo(destination);
     this.accelerate();
   },

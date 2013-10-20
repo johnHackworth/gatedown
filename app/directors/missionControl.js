@@ -23,17 +23,16 @@ window.gatedown.src.MissionControl.prototype = {
   options: {
     size: [50000, 50000]
   },
-  initializeObjetives: function(primary, secondary) {
+  initializeObjetives: function(primary, secondary, endMission) {
     window.missionControl = this;
     this.primaryObjetive = primary;
     this.secondaryObjetive = secondary;
     this.objetiveInterval = setInterval(this.checkObjetives.bind(this), 3000);
+    this.endMission = endMission;
   },
   checkObjetives: function() {
     var self = this;
-    if(this.primaryObjetive.condition.apply(this) && !this.primaryCompleted) {
-      this.sayStatusWindow('Primary objetive completed')
-      this.primaryCompleted = true;
+    if(this.endMission && this.endMission()) {
       setTimeout(function() {
         self.finishedMissionWindow = Crafty.e('MissionFinishedWindow')
         self.finishedMissionWindow.initialize({
@@ -42,9 +41,13 @@ window.gatedown.src.MissionControl.prototype = {
           shipDestroyed: false
         })
       }, 2000)
-    }
-    if(this.secondaryObjetive.condition.apply(this) && !this.secondaryCompleted) {
-      this.secondaryCompleted = true;
+      if(this.primaryObjetive.condition.apply(this) && !this.primaryCompleted) {
+        this.sayStatusWindow('Primary objetive completed')
+        this.primaryCompleted = true;
+      }
+      if(this.secondaryObjetive.condition.apply(this) && !this.secondaryCompleted) {
+        this.secondaryCompleted = true;
+      }
     }
     if(this.playerShip.hullIntegrity <= 0) {
       this.sayStatusWindow('Your ship has been destroyed')
@@ -184,7 +187,7 @@ window.gatedown.src.MissionControl.prototype = {
       this.createAsteroids(type.asteroids);
     }
 
-    this.initializeObjetives(type.objetives[0], type.objetives[1]);
+    this.initializeObjetives(type.objetives[0], type.objetives[1], type.endMission);
 
   },
   clearAreaMission: function (level) {

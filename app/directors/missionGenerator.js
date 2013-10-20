@@ -287,11 +287,24 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     "One of our freighters is arriving to the system. There has been reports of enemy scouts in the zone, ",
     "So your squadron is going to be scrambled to keep them safe.",
     "Protect them"  ],
+  endMission: function() {
+    window.obj = this.objectiveShip;
+    if(this.objectiveShip.hit('Planet')) {
+      return true;
+    }
+    if(this.playerShip.hullIntegrity <= 0) {
+      return true;
+    }
+    if(this.objectiveShip.hullIntegrity <= 0) {
+      return true;
+    }
+    return false;
+  },
   objetives: [
   // 0:
     { "text": "Keep the freighter alive until it reach the planet base",
       "condition": function() {
-        return this.objectiveShip.hullIntegrity > 0 && this.counter > 4000
+        return this.objectiveShip.hullIntegrity > 0
       }
     },
   // 1:
@@ -315,7 +328,7 @@ window.gatedown.src.MissionTypes.scortFreighter = {
   ],
   enemyForces: function(level) {
     level = level? level: 1;
-    var scoutSquadrons = 3;
+    var scoutSquadrons = 2;
     var fighterSquadrons = 2;
     var forces = [];
     var initPoint = [
@@ -345,7 +358,7 @@ window.gatedown.src.MissionTypes.scortFreighter = {
       var shipInitPoint = [initPoint[0] + 200 + i * 100, initPoint[1] + 500];
       forces.push({
         type: 3,
-        number: 2,
+        number: 1,
         faction: this.enemyFaction,
         name: 'tralara',
         mission: {
@@ -363,8 +376,8 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     var scoutSquadrons = 3 - level;
     var forces = [];
     var initPoint = [
-     this.planetPos[0] + Math.random() * 5000 - 10000,
-     this.planetPos[1] + Math.random() * 5000 - 10000
+     this.planetPos[0] + Math.random() * 20000 - 10000,
+     this.planetPos[1] + Math.random() * 20000 - 10000
     ];
     initPoint.x = initPoint[0];
     initPoint.y = initPoint[1];
@@ -374,7 +387,7 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     var pilot = new window.gatedown.src.pilot();
     pilot.mission = {
           type: "goTo",
-          where: { center: [this.planetPos[0], this.planetPos[1]],radius: 500}
+          where: { center: [this.planetPos[0] + 300, this.planetPos[1]+ 300] ,radius: 100}
         },
     pilot.assignShip(this.objectiveShip);
     this.ships.push(this.objectiveShip)
@@ -388,7 +401,7 @@ window.gatedown.src.MissionTypes.scortFreighter = {
         number: 3,
         mission: {
           type: "defend",
-          where: { ship: this.objectiveShip, radius: 1000}
+          where: { ship: this.objectiveShip, radius: 500}
         },
         initPoint: shipInitPoint
       })
