@@ -12,7 +12,7 @@ Crafty.c('Freighter1', {
   centered: false,
   outOfControl: 0,
   init: function() {
-    this.requires('Ship, Color, sprFreighter')
+    this.requires('Ship, Color, sprFreighter, Tween')
       .color('transparent')
     this.hull = this.requires('Hull1');
     this.hull.resize(100,25)
@@ -20,6 +20,7 @@ Crafty.c('Freighter1', {
     this.counter = 0;
     this.initComponents();
     this.setMaxvelocity(2)
+    this.onHit('Planet', this.descend.bind(this));
   },
   initComponent: function(component, position) {
     this.components[component.toLowerCase()] = Crafty.e(component);
@@ -31,5 +32,10 @@ Crafty.c('Freighter1', {
     this.initComponent('Engine', [-5, 10]);
   },
   shoot: function() {
+  },
+  descend: function() {
+    this.tween({w:10, h:2}, 100);
+    this.speed = 0.3;
+    this.acceleration = 0;
   }
 });
