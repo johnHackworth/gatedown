@@ -1,6 +1,7 @@
 Crafty.c('ModalWindow', {
   backgroundColor: 'rgba(255,255,255,0.5)',
   pause: false,
+  z: 9998,
   init: function() {
     this.requires('2d, Canvas, Text, Color')
     this.initialize();
@@ -12,12 +13,11 @@ Crafty.c('ModalWindow', {
     var h = gatedown.config.height;
     this.width = w;
     this.height = h;
+    // this.z = 999999999;
     this.bind('EnterFrame', this.tick.bind(this));
     this.texts = [];
     this.drawnTexts = [];
-    if(this.pause) {
-      Crafty.pause();
-    }
+
   },
   setOptions: function(options) {
     if(options.backgroundColor) {
@@ -27,8 +27,8 @@ Crafty.c('ModalWindow', {
     if(options.pause) {
       this.pause = options.pause;
       if(this.pause) {
-        Crafty.pause();
         this.tick();
+        setTimeout(Crafty.pause.bind(Crafty), 25);
       }
     }
   },
@@ -39,7 +39,8 @@ Crafty.c('ModalWindow', {
       x:x,
       y:y,
       color: color,
-      style: style
+      style: style,
+      z: 9999
     })
 
     this.drawnTexts.push(Crafty.e('Text, Entity'))

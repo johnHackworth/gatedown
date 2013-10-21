@@ -8,7 +8,7 @@ Crafty.c('missionWindow', {
     var h = gatedown.config.height;
     this.options = options;
     this.modalW = this.requires('ModalWindow')
-
+    // this.z = 9999999999999;
     this.addText('Mission Briefing', w/2 -100, 20, '#880000', {size: '30px'});
     for(var i in this.options.texts) {
       this.addText(this.options.texts[i], 100, 50 + i*15);
@@ -21,7 +21,7 @@ Crafty.c('missionWindow', {
 
     this.modalW.setOptions({
       pause: true,
-      backgroundColor: 'rgba(255,235,155,0.6 )'
+      backgroundColor: 'rgba(255,235,155,0.6)'
     });
     setTimeout(this.keyDown.bind(this), 100);
   },

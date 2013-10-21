@@ -315,7 +315,7 @@ window.gatedown.src.MissionTypes.scortFreighter = {
   ],
   enemyForces: function(level) {
     level = level? level: 1;
-    var scoutSquadrons = 3;
+    var scoutSquadrons = 2;
     var fighterSquadrons = 2;
     var forces = [];
     var initPoint = [
@@ -363,8 +363,8 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     var scoutSquadrons = 3 - level;
     var forces = [];
     var initPoint = [
-     this.planetPos[0] + Math.random() * 5000 - 10000,
-     this.planetPos[1] + Math.random() * 5000 - 10000
+     this.planetPos[0] + Math.random() * 3000 - 6000,
+     this.planetPos[1] + Math.random() * 3000 - 6000
     ];
     initPoint.x = initPoint[0];
     initPoint.y = initPoint[1];
@@ -374,7 +374,7 @@ window.gatedown.src.MissionTypes.scortFreighter = {
     var pilot = new window.gatedown.src.pilot();
     pilot.mission = {
           type: "goTo",
-          where: { center: [this.planetPos[0], this.planetPos[1]],radius: 500}
+          where: { center: [this.planetPos[0], this.planetPos[1]],radius: 300}
         },
     pilot.assignShip(this.objectiveShip);
     this.ships.push(this.objectiveShip)

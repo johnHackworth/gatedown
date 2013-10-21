@@ -84,7 +84,7 @@ Crafty.scene('Planet', (function() {
       primaryObjetive: self.control.primaryObjetive.text,
       secondaryObjetive: self.control.secondaryObjetive.text
     })
-  }, 2000);
+  }, 20);
 
   this.keyListener = Crafty.e("KeyListener");
   this.keyListener.set(this);
@@ -110,7 +110,7 @@ Crafty.scene('Planet', (function() {
   setTimeout(function() {
     self.radar._draw();
     self.radar2._draw();
-  },500)
+  },25)
 
 }).bind(window.gatedown.app.scenes.planet ),
 function() {
