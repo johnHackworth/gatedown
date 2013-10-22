@@ -197,33 +197,38 @@ Crafty.c('Hull1', {
     }
   },
   checkKeyboardEvents: function() {
-    if(this.playerControlled) {
-      if(this.isDown('LEFT_ARROW') && this.counter % 1 == 0) {
-        this.turn(-4);
-      }
-      if (this.isDown('RIGHT_ARROW') && this.counter % 1 == 0) {
-        this.turn(4);
-      }
+    // if(this.playerControlled) {
+    //   if(this.isDown('LEFT_ARROW') && this.counter % 1 == 0) {
+    //     this.turn(-4);
+    //   }
+    //   if (this.isDown('RIGHT_ARROW') && this.counter % 1 == 0) {
+    //     this.turn(4);
+    //   }
 
-      if (this.isDown('UP_ARROW') && this.counter % 10 == 0) {
-        this.accelerate()
-      }
-      if (this.isDown('DOWN_ARROW') && this.counter % 10 == 0) {
-        this.deccelerate();
-      }
+    //   if (this.isDown('UP_ARROW') && this.counter % 10 == 0) {
+    //     this.accelerate()
+    //   }
+    //   if (this.isDown('DOWN_ARROW') && this.counter % 10 == 0) {
+    //     this.deccelerate();
+    //   }
 
-      if (this.isDown('SPACE')) {
-        this.pilot.shoot();
-      }
+    //   if (this.isDown('SPACE')) {
+    //     this.pilot.shoot();
+    //   }
 
-      if(this.isDown('Z')) {
-        this.pilot.breakFormation();
-      }
+    //   if (this.isDown('B')) {
+    //     console.log('1')
+    //     this.pilot.secondaryShoot();
+    //   }
 
-      if(this.isDown('X')) {
-        this.pilot.joinFormation();
-      }
-    }
+    //   if(this.isDown('Z')) {
+    //     // this.pilot.breakFormation();
+    //   }
+
+    //   if(this.isDown('X')) {
+    //     this.pilot.joinFormation();
+    //   }
+    // }
   },
   accelerate: function() {
     this.velocity += this.acceleration;

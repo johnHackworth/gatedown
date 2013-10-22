@@ -11,6 +11,20 @@ window.gatedown.src.MissionTypes.clearArea = {
     "We are sending you to intercept the enemy and make sure they don't do whatever they intend to do.",
     "You can expect nothing but light armored scout ships. Have a happy hunt"
   ],
+  endMission: function() {
+    window.obj = this.objectiveShip;
+    var remaining = this.remainingShips()
+    var enemyFaction = this.playerShip.userFaction === 1? 2:1;
+    if(remaining[enemyFaction] == 0) {
+      return true;
+    }
+
+    if(this.playerShip.hullIntegrity <= 0) {
+      return true;
+    }
+
+    return false;
+  },
   objetives: [
   // 0:
     { "text": "Kill all enemy ships",
@@ -92,6 +106,20 @@ window.gatedown.src.MissionTypes.shootDownSatellite = {
     "With that satellite, we can't resuply the station and we will probably lost the control of the farest sections of the system.",
     "We need to shoot it down as soon as possible. We aware that it will be protected by guardian ships."
   ],
+  endMission: function() {
+    window.obj = this.objectiveShip;
+    var remaining = this.remainingShips()
+    var enemyFaction = this.playerShip.userFaction === 1? 2:1;
+    if(this.objectiveShip.hullIntegrity <= 0) {
+      return true;
+    }
+
+    if(this.playerShip.hullIntegrity <= 0) {
+      return true;
+    }
+
+    return false;
+  },
   objetives: [
   // 0:
     { "text": "Shot down the armored satellite",
@@ -206,6 +234,20 @@ window.gatedown.src.MissionTypes.asteroidFieldHunt = {
     "So fellows... happy hunt"
   ],
   asteroids: 200,
+  endMission: function() {
+    window.obj = this.objectiveShip;
+    var remaining = this.remainingShips()
+    var enemyFaction = this.playerShip.userFaction === 1? 2:1;
+    if(remaining[enemyFaction] == 0) {
+      return true;
+    }
+
+    if(this.playerShip.hullIntegrity <= 0) {
+      return true;
+    }
+
+    return false;
+  },
   objetives: [
   // 0:
     { "text": "Kill all enemy ships",

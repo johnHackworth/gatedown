@@ -28,7 +28,9 @@ Crafty.c('KeyListener', {
     if (this.isDown('SPACE')) {
       this.control.playerShip.pilot.shoot();
     }
-
+    if (this.isDown('B')) {
+      this.control.playerShip.pilot.secondaryShoot();
+    }
     if(this.isDown('Z')) {
       this.control.playerShip.pilot.breakFormation();
     }

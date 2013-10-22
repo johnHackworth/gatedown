@@ -35,5 +35,14 @@ Crafty.c('Ship1', {
   shoot: function() {
     this.components['rightwing1'].shoot();
     this.components['leftwing1'].shoot();
+  },
+  secondaryShoot:function() {console.log(2)
+
+    if(!this.lastSecondaryShot || this.counter - this.lastSecondaryShot > 50) {
+      this.lastSecondaryShot = this.counter;
+      // console.log(2);
+      var activateBulletAfter = 15;
+      Crafty.e('Proton').shoot(this, activateBulletAfter);
+    }
   }
 });

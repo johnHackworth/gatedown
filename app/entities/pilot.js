@@ -389,6 +389,11 @@ window.gatedown.src.pilot.prototype = {
       this.squadron[i].shoot();
     }
   },
+  secondaryShoot: function() {
+    if(this.ship && this.ship.secondaryShoot) {
+      this.ship.secondaryShoot()
+    }
+  },
   sendRadioMessage: function(text ) {
     if(!this.lastMessage ||
       this.lastMessage.message.text != text ||
