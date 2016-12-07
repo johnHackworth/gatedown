@@ -14,8 +14,8 @@ Crafty.c('Bullet', {
 
 
   },
-  velocity: 20,
-  maxVelocity: 20,
+  velocity: 40,
+  maxVelocity: 40,
   maxLive: 40,
   heading: 0,
   setSpeed: function(v, mv) {
