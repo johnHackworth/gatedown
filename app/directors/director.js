@@ -9,7 +9,7 @@ window.gatedown.src.Director = function() {
 window.gatedown.config = {
   width: 1200,
   height: 800,
-  fps: 50
+  fps: 60
 }
 window.gatedown.app.enemy = function(faction) {
   return faction == 1? 2: 1;
