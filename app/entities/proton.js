@@ -21,6 +21,7 @@ Crafty.c('Proton', {
   maxVelocity: 15,
   maxLive: 80,
   heading: 0,
+  power: 5,
   setSpeed: function(v, mv) {
     this.velocity = v;
     this.maxVelocity = mv;
