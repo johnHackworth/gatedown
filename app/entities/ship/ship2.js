@@ -6,7 +6,7 @@ Crafty.c('Ship2', {
   baseTurningRadius: 4,
   velocity: 0 ,
   hullIntegrity: 3,
-  maxVelocity: 10,
+  maxVelocity: 15,
   heading: 0,
   centered: false,
   outOfControl: 0,
