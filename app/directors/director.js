@@ -7,9 +7,9 @@ window.gatedown.src.Director = function() {
 
 };
 window.gatedown.config = {
-  width: 800,
-  height: 600,
-  fps: 20
+  width: 1200,
+  height: 800,
+  fps: 50
 }
 window.gatedown.app.enemy = function(faction) {
   return faction == 1? 2: 1;
