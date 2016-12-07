@@ -63,7 +63,8 @@ Crafty.c('Hull1', {
       var bullet = Crafty(bullets[i]);
       if(bullet.owner != this) {
         if(!this.lastImpact ||this.counter - this.lastImpact > 20) {
-          this.hullIntegrity--;
+          var power = bullet.power || 1;
+          this.hullIntegrity-= power;
           this.trigger('hit')
           this.lastImpact = this.counter;
           this.explosion.sparks(this.rotatedPosition([0,3]));
