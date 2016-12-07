@@ -7,7 +7,7 @@ Crafty.c('Ship1', {
   baseTurningRadius: 5,
   velocity: 0 ,
   hullIntegrity: 3,
-  maxVelocity: 15,
+  maxVelocity: 12
   heading: 0,
   centered: false,
   outOfControl: 0,
@@ -19,7 +19,7 @@ Crafty.c('Ship1', {
     this.initBindings();
     this.counter = 0;
     this.initComponents();
-    this.setMaxvelocity(15)
+    this.setMaxvelocity(12
   },
   initComponent: function(component, position) {
     this.components[component.toLowerCase()] = Crafty.e(component);
