@@ -3,8 +3,8 @@ Crafty.sprite('assets/fighter2.png', {sprFighter2: [0,0,200,150]})
 
 Crafty.c('Fighter2', {
   acceleration: 1,
-  turningRadius: 5,
-  baseTurningRadius: 2,
+  turningRadius: 8,
+  baseTurningRadius: 6,
   velocity: 0 ,
   hullIntegrity: 4,
   maxVelocity: 15,
