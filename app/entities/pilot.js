@@ -141,10 +141,10 @@ window.gatedown.src.pilot.prototype = {
   shipInFront: function() {
     var ships = Crafty('Ship');
     var otherShip = null;
-    var minAngle = 20;
+    var minAngle = 40;
     for(var i = ships.length - 1; i >= 0; i--) {
       otherShip = Crafty(ships[i]);
-      minAngle = 20 + otherShip.w / 10 + otherShip.h / 10
+      minAngle = 40 + otherShip.w / 10 + otherShip.h / 10
       if(this.ship.distanceTo(otherShip) < this.SHOOTING_DISTANCE &&
         Math.abs(this.ship.getAngleTo(otherShip) - this.ship.heading) < minAngle &&
         this.ship.faction !== otherShip.faction
@@ -176,9 +176,6 @@ window.gatedown.src.pilot.prototype = {
         var incomingBullets = this.lookForBullets();
         if(incomingBullets.length > 0) {
           this.skipBullets(incomingBullets);
-          if(this.shipInFront()) {
-            this.shoot();
-          }
         } else {
           if(!this.attackingTarget || this.counter - this.lastTargetCheck > 15) {
             this.chooseTarget();
@@ -186,6 +183,10 @@ window.gatedown.src.pilot.prototype = {
           if(this.attackingTarget) {
             this.attack(this.attackingTarget);
           }
+        }
+
+        if(this.shipInFront()) {
+          this.shoot();
         }
       }
 
