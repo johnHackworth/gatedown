@@ -19,7 +19,7 @@ Crafty.c('Ship1', {
     this.initBindings();
     this.counter = 0;
     this.initComponents();
-    this.setMaxvelocity(12
+    this.setMaxvelocity(12);
   },
   initComponent: function(component, position) {
     this.components[component.toLowerCase()] = Crafty.e(component);
