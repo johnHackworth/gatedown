@@ -7,7 +7,7 @@ Crafty.c('Fighter2', {
   baseTurningRadius: 2,
   velocity: 0 ,
   hullIntegrity: 4,
-  maxVelocity: 10,
+  maxVelocity: 15,
   heading: 0,
   centered: false,
   outOfControl: 0,
@@ -19,7 +19,7 @@ Crafty.c('Fighter2', {
     this.initBindings();
     this.counter = 0;
     this.initComponents();
-    this.setMaxvelocity(10)
+    this.setMaxvelocity(15)
   },
   initComponent: function(name, component, position) {
     this.components[name] = Crafty.e(component);
