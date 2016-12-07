@@ -15,7 +15,7 @@ Crafty.c('Ship2', {
       .color('transparent')
     this.path = [];
 
-    this.setMaxvelocity(7)
+    this.setMaxvelocity(15)
     // this.initComponents();
   },
   shoot: function() {
