@@ -42,7 +42,8 @@ Crafty.c('HugeHull', {
       var bullet = Crafty(bullets[i]);
       if(bullet.owner != this) {
         if(!this.lastImpact ||this.counter - this.lastImpact > 0) {
-          this.hullIntegrity--;
+          var power = bullet.power || 1;
+          this.hullIntegrity-= power;
           this.trigger('hit');
           this.lastImpact = this.counter;
 
