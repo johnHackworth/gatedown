@@ -9,8 +9,8 @@ Crafty.scene('Planet', (function() {
   var self = this;
   this.TOTAL_WIDTH = 50000;
   this.TOTAL_HEIGHT = 50000;
-  this.ARRAY_WIDTH = 50;
-  this.ARRAY_HEIGHT = 500;
+  this.ARRAY_WIDTH = 100;
+  this.ARRAY_HEIGHT = 1000;
   gatedown.app.grid = [];
   for(var i = 0; i < this.ARRAY_HEIGHT; i++) {
     gatedown.app.grid[i] = [];
